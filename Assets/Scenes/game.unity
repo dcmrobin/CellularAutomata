@@ -247,6 +247,7 @@ MonoBehaviour:
   frequency: 0.06
   width: 100
   height: 100
+  paused: 0
   updateDelay: 0.2
 --- !u!4 &1303741811
 Transform:
