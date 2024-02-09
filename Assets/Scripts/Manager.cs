@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class Manager : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class Manager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                cells[x, y] = (Random.value < frequency)?1:0;
+                cells[x, y] = (UnityEngine.Random.value < frequency)?1:0;
             }
         }
     }
