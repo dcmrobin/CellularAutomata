@@ -4,13 +4,14 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System;
 
 public class Manager : MonoBehaviour
 {
     int[,] cells;
 
     [Range(0, 1)]
-    public float frequency;
+    public float density;
     public int width = 50;
     public int height = 50;
     public bool paused;
@@ -39,7 +40,7 @@ public class Manager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                cells[x, y] = (UnityEngine.Random.value < frequency)?1:0;
+                cells[x, y] = (UnityEngine.Random.value < density)?1:0;
             }
         }
     }
@@ -90,12 +91,62 @@ public class Manager : MonoBehaviour
 
     public void UpdateCells()
     {
+        int[,] newCells = new int[width, height];
+
+        // Iterate over all cells
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                // Get the number of alive neighbors for the current cell
+                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
+
+                // Apply Conway's rules
+                if (cells[x, y] == 1) // If the cell is alive
+                {
+                    if (aliveNeighbours < 2 || aliveNeighbours > 3)
+                    {
+                        // Any live cell with fewer than two live neighbors dies, or with more than three live neighbors dies
+                        newCells[x, y] = 0;
+                    }
+                    else
+                    {
+                        // Any live cell with two or three live neighbors lives on to the next generation
+                        newCells[x, y] = 1;
+                    }
+                }
+                else // If the cell is dead
+                {
+                    if (aliveNeighbours == 3)
+                    {
+                        // Any dead cell with exactly three live neighbors becomes a live cell
+                        newCells[x, y] = 1;
+                    }
+                    else
+                    {
+                        // Dead cells remain dead
+                        newCells[x, y] = 0;
+                    }
+                }
+            }
+        }
+
+        // Update the cells array with the new state
+        cells = newCells;
+
+        // Render the updated grid
+        Render();
+    }
+
+    //CRAZY LIFE
+    /*public void UpdateCells()
+    {
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
-
+ 
                 if (cells[x, y] == 1)
                 {
                     if (aliveNeighbours < 2)
@@ -120,9 +171,9 @@ public class Manager : MonoBehaviour
                 }
             }
         }
-
+ 
         Render();
-    }
+    }*/
 
     int GetSurroundingAliveCellCount(int gridX, int gridY)
     {
