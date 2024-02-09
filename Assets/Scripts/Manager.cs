@@ -155,21 +155,25 @@ public class Manager : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
             {
                 Vector2 pixelUV = hit.textureCoord;
                 pixelUV.x *= texture.width;
                 pixelUV.y *= texture.height;
-                if (cells[(int)pixelUV.x, (int)pixelUV.y] == 1)
-                {
-                    cells[(int)pixelUV.x, (int)pixelUV.y] = 0;
-                }
-                else
-                {
-                    cells[(int)pixelUV.x, (int)pixelUV.y] = 1;
-                }
+                cells[(int)pixelUV.x, (int)pixelUV.y] = 1;
+                Render();
+            }
+        }
+        else if (Input.GetMouseButton(1))
+        {
+            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+            {
+                Vector2 pixelUV = hit.textureCoord;
+                pixelUV.x *= texture.width;
+                pixelUV.y *= texture.height;
+                cells[(int)pixelUV.x, (int)pixelUV.y] = 0;
                 Render();
             }
         }
