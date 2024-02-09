@@ -13,10 +13,17 @@ public class Manager : MonoBehaviour
     public int height = 50;
     public float updateDelay = 3;
     float delay;
+    Texture2D texture;
+    GameObject plane;
 
     public void Start() {
         delay = updateDelay;
         cells = new int[width, height];
+        texture = new(width, height);
+
+        plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        plane.transform.Rotate(-90, 0, 0);
+        plane.GetComponent<MeshRenderer>().material.mainTexture = texture;
 
         GenerateRandomCells();
     }
@@ -32,7 +39,20 @@ public class Manager : MonoBehaviour
         }
     }
 
-    public void OnDrawGizmos() {
+    public void Render()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                texture.SetPixel(x, y, (cells[x, y] == 1)?Color.white:Color.black);
+                texture.Apply();
+            }
+        }
+    }
+
+    //OLD RENDERING CODE
+    /*public void OnDrawGizmos() {
         if (cells != null)
         {
             for (int x = 0; x < width; x++)
@@ -45,7 +65,7 @@ public class Manager : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     public void Update() {
         delay -= .1f;
@@ -88,6 +108,8 @@ public class Manager : MonoBehaviour
                 }
             }
         }
+
+        Render();
     }
 
     int GetSurroundingAliveCellCount(int gridX, int gridY)
