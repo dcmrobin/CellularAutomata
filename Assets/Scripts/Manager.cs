@@ -41,14 +41,16 @@ public class Manager : MonoBehaviour
 
     public void Render()
     {
+        Color[] colors = new Color[width * height];
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                texture.SetPixel(x, y, (cells[x, y] == 1)?Color.white:Color.black);
-                texture.Apply();
+                colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
             }
         }
+        texture.SetPixels(colors);
+        texture.Apply();
     }
 
     //OLD RENDERING CODE
