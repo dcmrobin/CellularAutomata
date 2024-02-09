@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class Manager : MonoBehaviour
@@ -11,11 +12,12 @@ public class Manager : MonoBehaviour
     public float frequency;
     public int width = 50;
     public int height = 50;
+    public bool paused;
     public float updateDelay = 3;
     float delay;
     Texture2D texture;
     GameObject plane;
-    public bool paused;
+    RaycastHit hit;
 
     public void Start() {
         delay = updateDelay;
@@ -150,6 +152,25 @@ public class Manager : MonoBehaviour
             else
             {
                 paused = false;
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+            {
+                Vector2 pixelUV = hit.textureCoord;
+                pixelUV.x *= texture.width;
+                pixelUV.y *= texture.height;
+                if (cells[(int)pixelUV.x, (int)pixelUV.y] == 1)
+                {
+                    cells[(int)pixelUV.x, (int)pixelUV.y] = 0;
+                }
+                else
+                {
+                    cells[(int)pixelUV.x, (int)pixelUV.y] = 1;
+                }
+                Render();
             }
         }
     }
