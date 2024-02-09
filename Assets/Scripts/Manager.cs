@@ -15,6 +15,7 @@ public class Manager : MonoBehaviour
     float delay;
     Texture2D texture;
     GameObject plane;
+    public bool paused;
 
     public void Start() {
         delay = updateDelay;
@@ -70,12 +71,17 @@ public class Manager : MonoBehaviour
     }*/
 
     public void Update() {
-        delay -= .1f;
-        if (delay <= 0)
+        if (!paused)
         {
-            UpdateCells();
-            delay = updateDelay;
+            delay -= .1f;
+            if (delay <= 0)
+            {
+                UpdateCells();
+                delay = updateDelay;
+            }
         }
+
+        HandleControls();
     }
 
     public void UpdateCells()
@@ -131,5 +137,20 @@ public class Manager : MonoBehaviour
             }
         }
         return aliveCellCount;
+    }
+
+    public void HandleControls()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (!paused)
+            {
+                paused = true;
+            }
+            else
+            {
+                paused = false;
+            }
+        }
     }
 }
