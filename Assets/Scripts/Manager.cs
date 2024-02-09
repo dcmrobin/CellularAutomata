@@ -23,6 +23,7 @@ public class Manager : MonoBehaviour
         delay = updateDelay;
         cells = new int[width, height];
         texture = new(width, height);
+        texture.filterMode = FilterMode.Point;
 
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.Rotate(-90, 0, 0);
