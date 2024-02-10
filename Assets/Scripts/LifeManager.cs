@@ -15,6 +15,7 @@ public class Manager : MonoBehaviour
     [Header("UI")]
     public Slider densitySlider;
     public Slider delaySlider;
+    public Toggle highlifeToggle;
     public Toggle chaosToggle;
 
     [Header("Controls")]
@@ -75,13 +76,17 @@ public class Manager : MonoBehaviour
             delay -= .1f;
             if (delay <= 0)
             {
-                if (!chaosToggle.isOn)
+                if (!chaosToggle.isOn && !highlifeToggle.isOn)
                 {
                     UpdateCells();
                 }
-                else
+                else if (chaosToggle.isOn)
                 {
                     ChaosCells();
+                }
+                else if (highlifeToggle)
+                {
+                    HighlifeCells();
                 }
                 delay = delaySlider.value;
             }
@@ -172,6 +177,48 @@ public class Manager : MonoBehaviour
             }
         }
  
+        Render();
+    }
+
+    public void HighlifeCells()
+    {
+        int[,] newCells = new int[width, height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
+
+                if (cells[x, y] == 1) // If the cell is alive
+                {
+                    if (aliveNeighbours < 2 || aliveNeighbours > 3)
+                    {
+                        newCells[x, y] = 0;
+                    }
+                    else
+                    {
+                        newCells[x, y] = 1;
+                    }
+                }
+                else
+                {
+                    if (aliveNeighbours == 3 || aliveNeighbours == 6)
+                    {
+                        newCells[x, y] = 1;
+                    }
+                    else
+                    {
+                        newCells[x, y] = 0;
+                    }
+                }
+            }
+        }
+
+        // Update the cells array with the new state
+        cells = newCells;
+
+        // Render the updated grid
         Render();
     }
 
