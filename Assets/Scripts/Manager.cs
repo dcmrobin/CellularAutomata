@@ -5,11 +5,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
+using TMPro;
+using Unity.VisualScripting;
 
 public class Manager : MonoBehaviour
 {
     int[,] cells;
 
+    [Header("UI")]
+    public Slider densitySlider;
+    public Slider delaySlider;
+    public Toggle chaosToggle;
+
+    [Header("Controls")]
     [Range(0, 1)]
     public float density;
     public int width = 50;
@@ -22,7 +30,8 @@ public class Manager : MonoBehaviour
     RaycastHit hit;
 
     public void Start() {
-        delay = updateDelay;
+        densitySlider.value = density;
+        delaySlider.value = delay = updateDelay;
         cells = new int[width, height];
         texture = new(width, height);
         texture.filterMode = FilterMode.Point;
@@ -40,9 +49,10 @@ public class Manager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                cells[x, y] = (UnityEngine.Random.value < density)?1:0;
+                cells[x, y] = (UnityEngine.Random.value < densitySlider.value)?1:0;
             }
         }
+        Render();
     }
 
     public void Render()
@@ -59,30 +69,21 @@ public class Manager : MonoBehaviour
         texture.Apply();
     }
 
-    //OLD RENDERING CODE
-    /*public void OnDrawGizmos() {
-        if (cells != null)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    Gizmos.color = (cells[x, y] == 1)?Color.white:Color.black;
-                    Vector2 pos = new(-width/2 + x + .5f, -height/2 + y + .5f);
-                    Gizmos.DrawCube(pos, Vector2.one);
-                }
-            }
-        }
-    }*/
-
     public void Update() {
         if (!paused)
         {
             delay -= .1f;
             if (delay <= 0)
             {
-                UpdateCells();
-                delay = updateDelay;
+                if (!chaosToggle.isOn)
+                {
+                    UpdateCells();
+                }
+                else
+                {
+                    ChaosCells();
+                }
+                delay = delaySlider.value;
             }
         }
 
@@ -138,8 +139,7 @@ public class Manager : MonoBehaviour
         Render();
     }
 
-    //CRAZY LIFE
-    /*public void UpdateCells()
+    public void ChaosCells()
     {
         for (int x = 0; x < width; x++)
         {
@@ -173,7 +173,7 @@ public class Manager : MonoBehaviour
         }
  
         Render();
-    }*/
+    }
 
     int GetSurroundingAliveCellCount(int gridX, int gridY)
     {
@@ -197,38 +197,27 @@ public class Manager : MonoBehaviour
     public void HandleControls()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (!paused)
-            {
-                paused = true;
-            }
-            else
-            {
-                paused = false;
-            }
-        }
+            paused = !paused;
 
         if (Input.GetMouseButton(0))
         {
-            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
-            {
-                Vector2 pixelUV = hit.textureCoord;
-                pixelUV.x *= texture.width;
-                pixelUV.y *= texture.height;
-                cells[(int)pixelUV.x, (int)pixelUV.y] = 1;
-                Render();
-            }
+            SetCell(1);
         }
         else if (Input.GetMouseButton(1))
         {
-            if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
-            {
-                Vector2 pixelUV = hit.textureCoord;
-                pixelUV.x *= texture.width;
-                pixelUV.y *= texture.height;
-                cells[(int)pixelUV.x, (int)pixelUV.y] = 0;
-                Render();
-            }
+            SetCell(0);
+        }
+    }
+
+    public void SetCell(int cellValue)
+    {
+        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+        {
+            Vector2 pixelUV = hit.textureCoord;
+            pixelUV.x *= texture.width;
+            pixelUV.y *= texture.height;
+            cells[(int)pixelUV.x, (int)pixelUV.y] = cellValue;
+            Render();
         }
     }
 }
