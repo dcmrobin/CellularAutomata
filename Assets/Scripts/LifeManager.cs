@@ -272,19 +272,17 @@ public class Manager : MonoBehaviour
     int GetSurroundingAliveCellCount(int gridX, int gridY)
     {
         int aliveCellCount = 0;
-        for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX ++)
+        for (int offsetX = -1; offsetX <= 1; offsetX++)
         {
-            for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY ++)
+            for (int offsetY = -1; offsetY <= 1; offsetY++)
             {
-                if (neighbourX >= 0 && neighbourX < width && neighbourY >= 0 && neighbourY < height)
-                {
-                    if (neighbourX != gridX || neighbourY != gridY)
-                    {
-                        aliveCellCount += cells[neighbourX, neighbourY];
-                    }
-                }
+                int neighbourX = (gridX + offsetX + width) % width;
+                int neighbourY = (gridY + offsetY + height) % height;
+                aliveCellCount += cells[neighbourX, neighbourY];
             }
         }
+        // Subtract the central cell's value because it was added in the loop
+        aliveCellCount -= cells[gridX, gridY];
         return aliveCellCount;
     }
 
