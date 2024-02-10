@@ -15,6 +15,7 @@ public class Manager : MonoBehaviour
     [Header("UI")]
     public Slider densitySlider;
     public Slider delaySlider;
+    public Toggle mazeToggle;
     public Toggle highlifeToggle;
     public Toggle chaosToggle;
 
@@ -76,7 +77,7 @@ public class Manager : MonoBehaviour
             delay -= .1f;
             if (delay <= 0)
             {
-                if (!chaosToggle.isOn && !highlifeToggle.isOn)
+                if (!chaosToggle.isOn && !highlifeToggle.isOn && !mazeToggle.isOn)
                 {
                     UpdateCells();
                 }
@@ -84,9 +85,13 @@ public class Manager : MonoBehaviour
                 {
                     ChaosCells();
                 }
-                else if (highlifeToggle)
+                else if (highlifeToggle.isOn)
                 {
                     HighlifeCells();
+                }
+                else if (mazeToggle.isOn)
+                {
+                    MazeCells();
                 }
                 delay = delaySlider.value;
             }
@@ -204,6 +209,48 @@ public class Manager : MonoBehaviour
                 else
                 {
                     if (aliveNeighbours == 3 || aliveNeighbours == 6)
+                    {
+                        newCells[x, y] = 1;
+                    }
+                    else
+                    {
+                        newCells[x, y] = 0;
+                    }
+                }
+            }
+        }
+
+        // Update the cells array with the new state
+        cells = newCells;
+
+        // Render the updated grid
+        Render();
+    }
+
+    public void MazeCells()
+    {
+        int[,] newCells = new int[width, height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
+
+                if (cells[x, y] == 1) // If the cell is alive
+                {
+                    if (aliveNeighbours < 1 || aliveNeighbours > 5)
+                    {
+                        newCells[x, y] = 0;
+                    }
+                    else
+                    {
+                        newCells[x, y] = 1;
+                    }
+                }
+                else
+                {
+                    if (aliveNeighbours == 3)
                     {
                         newCells[x, y] = 1;
                     }
