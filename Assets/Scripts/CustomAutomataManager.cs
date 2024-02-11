@@ -118,34 +118,26 @@ public class CustomAutomataManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
-
-                for (int b = 0; b < bornIntArray.Length; b++)
+                if (newCells[x, y] == 1)
                 {
-                    for (int s = 0; s < surviveIntArray.Length; s++)
+                    if (CheckArray(surviveIntArray, x, y))
                     {
-                        if (newCells[x, y] == 1)
-                        {
-                            if (aliveNeighbours == surviveIntArray[s])
-                            {
-                                newCells[x, y] = 1;
-                            }
-                            else
-                            {
-                                newCells[x, y] = 0;
-                            }
-                        }
-                        else
-                        {
-                            if (aliveNeighbours == bornIntArray[b])
-                            {
-                                newCells[x, y] = 1;
-                            }
-                            else
-                            {
-                                newCells[x, y] = 0;
-                            }
-                        }
+                        newCells[x, y] = 1;
+                    }
+                    else
+                    {
+                        newCells[x, y] = 0;
+                    }
+                }
+                else
+                {
+                    if (CheckArray(bornIntArray, x, y))
+                    {
+                        newCells[x, y] = 1;
+                    }
+                    else
+                    {
+                        newCells[x, y] = 0;
                     }
                 }
             }
@@ -156,6 +148,19 @@ public class CustomAutomataManager : MonoBehaviour
 
         // Render the updated grid
         Render();
+    }
+
+    bool CheckArray(int[] charArray, int x, int y)
+    {
+        bool res = false;
+        for (int i = 0; i < charArray.Length; i++)
+        {
+            if (GetSurroundingAliveCellCount(x, y) == charArray[i])
+            {
+                res = true;
+            }
+        }
+        return res;
     }
 
     public void UpdateCells()
