@@ -118,8 +118,7 @@ public class CustomAutomataManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                Debug.Log("NC = " + newCells[x, y]);
-                if (newCells[x, y] == 1)
+                if (cells[x, y] == 1)
                 {
                     if (CheckLiveNeighborCombinations(surviveIntArray, x, y))
                     {
