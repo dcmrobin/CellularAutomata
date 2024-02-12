@@ -242,6 +242,15 @@ public class CustomAutomataManager : MonoBehaviour
         {
             SetCell(0);
         }
+
+        if (bornInputfield.text != "")
+        {
+            surviveInputfield.text = "0";
+        }
+        else if (surviveInputfield.text != "")
+        {
+            bornInputfield.text = "0";
+        }
     }
 
     public void SetCell(int cellValue)
