@@ -118,9 +118,10 @@ public class CustomAutomataManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
+                Debug.Log("NC = " + newCells[x, y]);
                 if (newCells[x, y] == 1)
                 {
-                    if (CheckArray(surviveIntArray, x, y))
+                    if (CheckLiveNeighborCombinations(surviveIntArray, x, y))
                     {
                         newCells[x, y] = 1;
                     }
@@ -131,7 +132,7 @@ public class CustomAutomataManager : MonoBehaviour
                 }
                 else
                 {
-                    if (CheckArray(bornIntArray, x, y))
+                    if (CheckLiveNeighborCombinations(bornIntArray, x, y))
                     {
                         newCells[x, y] = 1;
                     }
@@ -150,12 +151,12 @@ public class CustomAutomataManager : MonoBehaviour
         Render();
     }
 
-    bool CheckArray(int[] charArray, int x, int y)
+    bool CheckLiveNeighborCombinations(int[] liveNeighborCombinations, int x, int y)
     {
         bool res = false;
-        for (int i = 0; i < charArray.Length; i++)
+        for (int i = 0; i < liveNeighborCombinations.Length; i++)
         {
-            if (GetSurroundingAliveCellCount(x, y) == charArray[i])
+            if (GetSurroundingAliveCellCount(x, y) == liveNeighborCombinations[i])
             {
                 res = true;
             }
@@ -243,14 +244,14 @@ public class CustomAutomataManager : MonoBehaviour
             SetCell(0);
         }
 
-        if (bornInputfield.text != "")
+        /*if (bornInputfield.text != "")
         {
             surviveInputfield.text = "0";
         }
         else if (surviveInputfield.text != "")
         {
             bornInputfield.text = "0";
-        }
+        }*/
     }
 
     public void SetCell(int cellValue)
