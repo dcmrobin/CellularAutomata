@@ -56,6 +56,18 @@ public class CustomAutomataManager : MonoBehaviour
         Render();
     }
 
+    public void Clear()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                cells[x, y] = 0;
+            }
+        }
+        Render();
+    }
+
     public void Render()
     {
         Color[] colors = new Color[width * height];
