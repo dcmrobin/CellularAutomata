@@ -10,11 +10,13 @@ using Unity.VisualScripting;
 
 public enum CellState { Off, On, State2, State3 } // Add more states as needed
 
+[System.Serializable]
 public class Cell {
     public CellState State { get; set; }
     // Add any additional properties or methods you might need
 }
 
+[System.Serializable]
 public struct CustomRule {
     public int[] NeighborCounts; // Array of neighbor counts that trigger this rule
     public CellState TargetState; // State to change to

@@ -2693,6 +2693,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b25fffd22fa8b469832ad6cc103575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customRules:
+  - NeighborCounts: 
+    TargetState: 0
   densitySlider: {fileID: 789519080}
   delaySlider: {fileID: 302250324}
   density: 0.3
