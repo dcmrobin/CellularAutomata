@@ -9,6 +9,7 @@ public class Loader : MonoBehaviour
     public int menuSceneIndex = 0;
     public int lifeSceneIndex = 1;
     public int customAutomataSceneIndex = 2;
+    public int multicolorAutomataSceneIndex = 3;
 
     public void LoadMenu()
     {
@@ -23,5 +24,10 @@ public class Loader : MonoBehaviour
     public void LoadCreate()
     {
         SceneManager.LoadScene(customAutomataSceneIndex);
+    }
+
+    public void LoadMulticolor()
+    {
+        SceneManager.LoadScene(multicolorAutomataSceneIndex);
     }
 }
