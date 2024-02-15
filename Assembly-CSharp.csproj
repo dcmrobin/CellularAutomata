@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\MultipleStateAutomataManager.cs" />
+     <Compile Include="Assets\Scripts\MultiStateAutomataUI.cs" />
      <Compile Include="Assets\Scripts\CustomAutomataManager.cs" />
      <Compile Include="Assets\Scripts\Loader.cs" />
      <Compile Include="Assets\Scripts\LifeManager.cs" />

@@ -9,11 +9,11 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.UIElements;
 
-public enum CellState { Off, On, State2, State3, State4 } // Add more states as needed
+public enum CellState { Off_0, On_1, State2_2, State3_3, State4_4 } // Add more states as needed
 
 [System.Serializable]
 public struct CustomRule {
-    public CellState[] NeighborStatesToTriggerRule;
+    public int[] NeighborStatesToTriggerRule;
     [Range(0, 8)]
     public int[] NeighborCountsToTriggerRule; // Array of neighbor counts that trigger this rule
     public CellState OriginalState;
@@ -122,7 +122,7 @@ public class MultipleStateAutomataManager : MonoBehaviour
                     {
                         for (int j = 0; j < rule.NeighborStatesToTriggerRule.Length; j++)
                         {
-                            if (cells[x, y] == (int)rule.OriginalState && rule.NeighborCountsToTriggerRule[i] == GetSurroundingCellOfStateCount(x, y, (int)rule.NeighborStatesToTriggerRule[j])) {
+                            if (cells[x, y] == (int)rule.OriginalState && rule.NeighborCountsToTriggerRule[i] == GetSurroundingCellOfStateCount(x, y, rule.NeighborStatesToTriggerRule[j])) {
                                 newCells[x, y] = (int)rule.TargetState;
                                 break;
                             }
