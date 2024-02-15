@@ -2694,16 +2694,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customRules:
-  - NeighborCounts: 
-    TargetState: 0
-  - NeighborCounts: 
+  - CellColorsToTriggerRule:
+    - {r: 1, g: 0, b: 0, a: 0}
+    NeighborCountsToTriggerRule: 02000000
     TargetState: 1
-  - NeighborCounts: 
+  - CellColorsToTriggerRule:
+    - {r: 1, g: 1, b: 1, a: 0}
+    NeighborCountsToTriggerRule: 02000000
     TargetState: 2
-  - NeighborCounts: 
-    TargetState: 3
-  - NeighborCounts: 
-    TargetState: 4
   densitySlider: {fileID: 789519080}
   delaySlider: {fileID: 302250324}
   density: 0.3

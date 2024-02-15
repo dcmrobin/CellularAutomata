@@ -7,13 +7,15 @@ using UnityEngine.InputSystem;
 using System;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.UIElements;
 
 public enum CellState { Off, On, State2, State3, State4 } // Add more states as needed
 
 [System.Serializable]
 public struct CustomRule {
+    public Color[] CellColorsToTriggerRule;
     [Range(0, 8)]
-    public int[] NeighborCounts; // Array of neighbor counts that trigger this rule
+    public int[] NeighborCountsToTriggerRule; // Array of neighbor counts that trigger this rule
     public CellState TargetState; // State to change to
 }
 
@@ -111,25 +113,20 @@ public class MultipleStateAutomataManager : MonoBehaviour
         // Iterate over all cells
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
-                bool ruleApplied = false;
+                int aliveNeighbors = GetSurroundingAliveCellCount(x, y);
 
                 // Check custom rules
                 foreach (CustomRule rule in customRules) {
-                    for (int i = 0; i < rule.NeighborCounts.Length; i++)
+                    for (int i = 0; i < rule.NeighborCountsToTriggerRule.Length; i++)
                     {
-                        if (rule.NeighborCounts[i] == aliveNeighbours) {
-                            newCells[x, y] = (int)rule.TargetState;
-                            ruleApplied = true;
-                            break;
+                        for (int j = 0; j < rule.CellColorsToTriggerRule.Length; j++)
+                        {
+                            if (rule.NeighborCountsToTriggerRule[i] == aliveNeighbors) {
+                                newCells[x, y] = (int)rule.TargetState;
+                                break;
+                            }
                         }
                     }
-                }
-
-                // Apply default rules if no custom rule was applied
-                if (!ruleApplied) {
-                    // Apply default rules
-                    // (e.g., Conway's Game of Life rules)
                 }
             }
         }
@@ -171,15 +168,6 @@ public class MultipleStateAutomataManager : MonoBehaviour
         {
             SetCell(0);
         }
-
-        /*if (bornInputfield.text != "")
-        {
-            surviveInputfield.text = "0";
-        }
-        else if (surviveInputfield.text != "")
-        {
-            bornInputfield.text = "0";
-        }*/
     }
 
     public void SetCell(int cellValue)
