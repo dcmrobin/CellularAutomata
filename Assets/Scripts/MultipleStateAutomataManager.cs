@@ -11,12 +11,6 @@ using Unity.VisualScripting;
 public enum CellState { Off, On, State2, State3, State4 } // Add more states as needed
 
 [System.Serializable]
-public class Cell {
-    public CellState State { get; set; }
-    // Add any additional properties or methods you might need
-}
-
-[System.Serializable]
 public struct CustomRule {
     [Range(0, 8)]
     public int[] NeighborCounts; // Array of neighbor counts that trigger this rule

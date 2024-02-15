@@ -2694,15 +2694,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customRules:
-  - NeighborCounts: 00000000
+  - NeighborCounts: 
     TargetState: 0
-  - NeighborCounts: 01000000
+  - NeighborCounts: 
     TargetState: 1
-  - NeighborCounts: 02000000
+  - NeighborCounts: 
     TargetState: 2
-  - NeighborCounts: 03000000
+  - NeighborCounts: 
     TargetState: 3
-  - NeighborCounts: 04000000
+  - NeighborCounts: 
     TargetState: 4
   densitySlider: {fileID: 789519080}
   delaySlider: {fileID: 302250324}
