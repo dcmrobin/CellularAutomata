@@ -2696,7 +2696,7 @@ MonoBehaviour:
   customRules:
   - NeighborStatesToTriggerRule: 01000000
     NeighborCountsToTriggerRule: 01000000
-    OriginalState: 0
+    OriginalState: 1
     TargetState: 2
   densitySlider: {fileID: 789519080}
   delaySlider: {fileID: 302250324}

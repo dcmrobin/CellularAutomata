@@ -122,7 +122,7 @@ public class MultipleStateAutomataManager : MonoBehaviour
                     {
                         for (int j = 0; j < rule.NeighborStatesToTriggerRule.Length; j++)
                         {
-                            if (newCells[x, y] == (int)rule.OriginalState && rule.NeighborCountsToTriggerRule[i] == GetSurroundingCellOfStateCount(x, y, (int)rule.NeighborStatesToTriggerRule[j])) {
+                            if (cells[x, y] == (int)rule.OriginalState && rule.NeighborCountsToTriggerRule[i] == GetSurroundingCellOfStateCount(x, y, (int)rule.NeighborStatesToTriggerRule[j])) {
                                 newCells[x, y] = (int)rule.TargetState;
                                 break;
                             }
