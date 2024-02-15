@@ -9,7 +9,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.UIElements;
 
-public enum CellState { Off_0, On_1, State2_2, State3_3, State4_4 } // Add more states as needed
+public enum CellState { Black_0, White_1, Red_2, Green_3, Blue_4 } // Add more states as needed
 
 [System.Serializable]
 public struct CustomRule {
