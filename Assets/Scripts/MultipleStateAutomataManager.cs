@@ -8,7 +8,7 @@ using System;
 using TMPro;
 using Unity.VisualScripting;
 
-public enum CellState { Off, On, State2, State3 } // Add more states as needed
+public enum CellState { Off, On, State2, State3, State4 } // Add more states as needed
 
 [System.Serializable]
 public class Cell {
