@@ -13,9 +13,10 @@ public enum CellState { Off, On, State2, State3, State4 } // Add more states as 
 
 [System.Serializable]
 public struct CustomRule {
-    public Color[] CellColorsToTriggerRule;
+    public CellState[] NeighborStatesToTriggerRule;
     [Range(0, 8)]
     public int[] NeighborCountsToTriggerRule; // Array of neighbor counts that trigger this rule
+    public CellState OriginalState;
     public CellState TargetState; // State to change to
 }
 
@@ -113,15 +114,15 @@ public class MultipleStateAutomataManager : MonoBehaviour
         // Iterate over all cells
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                int aliveNeighbors = GetSurroundingAliveCellCount(x, y);
+                //int aliveNeighbors = GetSurroundingAliveCellCount(x, y);
 
                 // Check custom rules
                 foreach (CustomRule rule in customRules) {
                     for (int i = 0; i < rule.NeighborCountsToTriggerRule.Length; i++)
                     {
-                        for (int j = 0; j < rule.CellColorsToTriggerRule.Length; j++)
+                        for (int j = 0; j < rule.NeighborStatesToTriggerRule.Length; j++)
                         {
-                            if (rule.NeighborCountsToTriggerRule[i] == aliveNeighbors) {
+                            if (newCells[x, y] == (int)rule.OriginalState && rule.NeighborCountsToTriggerRule[i] == GetSurroundingCellOfStateCount(x, y, (int)rule.NeighborStatesToTriggerRule[j])) {
                                 newCells[x, y] = (int)rule.TargetState;
                                 break;
                             }
@@ -138,7 +139,7 @@ public class MultipleStateAutomataManager : MonoBehaviour
         Render();
     }
 
-    int GetSurroundingAliveCellCount(int gridX, int gridY)
+    int GetSurroundingCellOfStateCount(int gridX, int gridY, int cellState)
     {
         int aliveCellCount = 0;
         for (int offsetX = -1; offsetX <= 1; offsetX++)
@@ -147,7 +148,10 @@ public class MultipleStateAutomataManager : MonoBehaviour
             {
                 int neighbourX = (gridX + offsetX + width) % width;
                 int neighbourY = (gridY + offsetY + height) % height;
-                aliveCellCount += cells[neighbourX, neighbourY];
+                if (cells[neighbourX, neighbourY] == cellState)
+                {
+                    aliveCellCount += cells[neighbourX, neighbourY];
+                }
             }
         }
         // Subtract the central cell's value because it was added in the loop
