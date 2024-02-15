@@ -18,6 +18,7 @@ public class Cell {
 
 [System.Serializable]
 public struct CustomRule {
+    [Range(0, 8)]
     public int[] NeighborCounts; // Array of neighbor counts that trigger this rule
     public CellState TargetState; // State to change to
 }
@@ -88,7 +89,7 @@ public class MultipleStateAutomataManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
+                colors[x + y * width] = (cells[x, y] == 1) ? Color.white : (cells[x, y] == 2 ? Color.red : (cells[x, y] == 3 ? Color.green : (cells[x, y] == 4 ? Color.blue : Color.black)));
             }
         }
         texture.SetPixels(colors);
