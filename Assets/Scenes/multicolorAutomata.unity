@@ -1389,8 +1389,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 837879383}
+  m_Children: []
   m_Father: {fileID: 2043435110}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -3407,8 +3406,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 50.081985}
-  m_SizeDelta: {x: 150, y: 185.31}
+  m_AnchoredPosition: {x: 0, y: 35.082005}
+  m_SizeDelta: {x: 150, y: 155.31}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &792922757
 MonoBehaviour:
@@ -3496,6 +3495,7 @@ MonoBehaviour:
     NeighborCountsToTriggerRule: 
     OriginalState: 0
     TargetState: 0
+  rulePrefab: {fileID: 768349266216881674, guid: 0f47b8df14f6a744b80c1e8b16dabcdb, type: 3}
   nieghborAmtRuleTriggerInputfield: {fileID: 342177375}
   neighborStatesToTriggerRule: {fileID: 650259323}
   originalStateDropdown: {fileID: 1942769785}
@@ -3513,7 +3513,7 @@ GameObject:
   - component: {fileID: 837879385}
   - component: {fileID: 837879384}
   m_Layer: 5
-  m_Name: NewRule
+  m_Name: NewRuleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3526,17 +3526,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 837879382}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1976968082}
-  m_Father: {fileID: 406865330}
+  m_Father: {fileID: 1945238383}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 75, y: -105.100006}
   m_SizeDelta: {x: 120, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &837879384
@@ -7523,11 +7523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b25fffd22fa8b469832ad6cc103575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customRules:
-  - NeighborStatesToTriggerRule: 01000000
-    NeighborCountsToTriggerRule: 01000000
-    OriginalState: 1
-    TargetState: 2
+  customRules: []
   densitySlider: {fileID: 789519080}
   delaySlider: {fileID: 302250324}
   density: 0.3
@@ -7707,6 +7703,7 @@ RectTransform:
   - {fileID: 211546996}
   - {fileID: 1813557636}
   - {fileID: 354655805}
+  - {fileID: 837879383}
   - {fileID: 792922756}
   m_Father: {fileID: 1159808055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
