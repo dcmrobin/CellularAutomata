@@ -30,12 +30,12 @@ public class MultiStateAutomataUI : MonoBehaviour
         GameObject newRuleGameObject = Instantiate(rulePrefab, transform.Find("Viewport").Find("Content"));
         newRuleGameObject.name = manager.customRules.Count.ToString();
         newRuleGameObject.transform.Find("Text").GetComponent<TMP_Text>().text = "Rule " + manager.customRules.Count;
-        newRuleGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteRule(Convert.ToInt32(newRuleGameObject.name)));
+        newRuleGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteRule(newRuleGameObject.transform.GetSiblingIndex()));
     }
 
     public void DeleteRule(int n)
     {
-        manager.customRules.RemoveAt(n-1);
+        manager.customRules.RemoveAt(n);
         for (int i = 0; i < transform.Find("Viewport").Find("Content").childCount; i++)
         {
             if (!transform.Find("Viewport").Find("Content").GetChild(i).gameObject.activeSelf)
