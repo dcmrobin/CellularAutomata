@@ -33,7 +33,7 @@ public class MultiStateAutomataUI : MonoBehaviour
         newRuleGameObject.name = manager.customRules.Count.ToString();
         newRuleGameObject.transform.Find("Text").GetComponent<TMP_Text>().text = "Rule " + manager.customRules.Count;
         newRuleGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteRule(newRuleGameObject.transform.GetSiblingIndex()));
-        newRuleGameObject.GetComponent<Button>().onClick.AddListener(() => ViewRule(1234, 1234, newRule.OriginalState.ToString(), newRule.TargetState.ToString(), Convert.ToInt32(newRuleGameObject.name)));
+        newRuleGameObject.GetComponent<Button>().onClick.AddListener(() => ViewRule(neighborStatesToTriggerRule.text, nieghborAmtRuleTriggerInputfield.text, newRule.OriginalState.ToString(), newRule.TargetState.ToString(), Convert.ToInt32(newRuleGameObject.name)));
     }
 
     public void DeleteRule(int n)
@@ -48,12 +48,12 @@ public class MultiStateAutomataUI : MonoBehaviour
         }
     }
 
-    public void ViewRule(int nStates, int nAmts, string oState, string tState, int ruleNum)
+    public void ViewRule(string nStates, string nAmts, string oState, string tState, int ruleNum)
     {
         viewRuleUI.SetActive(true);
 
-        viewRuleUI.transform.Find("NeighborStatesTriggerRuleInputField").GetComponent<TMP_InputField>().text = nStates.ToString();
-        viewRuleUI.transform.Find("NeighborAmtsTriggerRuleInputField").GetComponent<TMP_InputField>().text = nAmts.ToString();
+        viewRuleUI.transform.Find("NeighborStatesTriggerRuleInputField").GetComponent<TMP_InputField>().text = nStates;
+        viewRuleUI.transform.Find("NeighborAmtsTriggerRuleInputField").GetComponent<TMP_InputField>().text = nAmts;
         viewRuleUI.transform.Find("OriginalState").GetComponent<TMP_InputField>().text = oState;
         viewRuleUI.transform.Find("TargetState").GetComponent<TMP_InputField>().text = tState;
         viewRuleUI.transform.Find("Header").GetComponent<TMP_Text>().text = "Rule " + ruleNum.ToString();
