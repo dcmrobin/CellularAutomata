@@ -58,7 +58,8 @@ public class MultipleStateAutomataManager : MonoBehaviour {
     void GenerateRandomCells() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                cells[x, y] = (UnityEngine.Random.value < densitySlider.value) ? 1 : 0;
+                int randInt = Random.Range(1, 4);
+                cells[x, y] = (UnityEngine.Random.value < densitySlider.value) ? randInt : 0;
             }
         }
         Render();
