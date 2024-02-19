@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using UnityEditorInternal.VersionControl;
-using System.Linq;
 
 public class MultiStateAutomataUI : MonoBehaviour
 {
