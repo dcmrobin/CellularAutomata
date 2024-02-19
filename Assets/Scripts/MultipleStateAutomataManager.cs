@@ -28,6 +28,7 @@ public class MultipleStateAutomataManager : MonoBehaviour
     [Header("UI")]
     public Slider densitySlider;
     public Slider delaySlider;
+    public TMP_Dropdown cellToDrawDropdown;
 
     [Header("Controls")]
     [Range(0, 1)]
@@ -51,6 +52,11 @@ public class MultipleStateAutomataManager : MonoBehaviour
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.Rotate(-90, 0, 0);
         plane.GetComponent<MeshRenderer>().material.mainTexture = texture;
+
+        string[] cellStateContents = Enum.GetNames(typeof(CellState));
+        List<string> contents = new List<string>(cellStateContents);
+        cellToDrawDropdown.AddOptions(contents);
+        cellToDrawDropdown.value = 1;
 
         GenerateRandomCells();
     }
@@ -166,7 +172,7 @@ public class MultipleStateAutomataManager : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            SetCell(1);
+            SetCell(cellToDrawDropdown.value);
         }
         else if (Input.GetMouseButton(1))
         {
