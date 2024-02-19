@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using UnityEditorInternal.VersionControl;
+using System.Linq;
 
 public class MultiStateAutomataUI : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class MultiStateAutomataUI : MonoBehaviour
         newRuleGameObject.name = manager.customRules.Count.ToString();
         newRuleGameObject.transform.Find("Text").GetComponent<TMP_Text>().text = "Rule " + manager.customRules.Count;
         newRuleGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteRule(newRuleGameObject.transform.GetSiblingIndex()));
-        newRuleGameObject.GetComponent<Button>().onClick.AddListener(() => ViewRule(manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].NeighborStatesToTriggerRule.ToString(), manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].NeighborCountsToTriggerRule.ToString(), manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].OriginalState.ToString(), manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].TargetState.ToString(), Convert.ToInt32(newRuleGameObject.name)));
+        newRuleGameObject.GetComponent<Button>().onClick.AddListener(() => ViewRule(ArrayToString(manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].NeighborStatesToTriggerRule), ArrayToString(manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].NeighborCountsToTriggerRule), manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].OriginalState.ToString(), manager.customRules[Convert.ToInt32(newRuleGameObject.name)-1].TargetState.ToString(), Convert.ToInt32(newRuleGameObject.name)));
     }
 
     public void DeleteRule(int n)
@@ -77,5 +78,16 @@ public class MultiStateAutomataUI : MonoBehaviour
         }
 
         return neighborAmtIntArray;
+    }
+
+    string ArrayToString(int[] array)
+    {
+        string[] stringArray = new string[array.Length];
+        for (int i = 0; i < array.Length; i++)
+        {
+            stringArray[i] = array[i].ToString();
+        }
+
+        return string.Join("n", stringArray);
     }
 }
