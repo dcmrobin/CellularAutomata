@@ -104,6 +104,23 @@ public class CustomAutomataManager : MonoBehaviour
         HandleControls();
     }
 
+    public void GenerateRandRule()
+    {
+        bornInputfield.text = surviveInputfield.text = "";
+
+        int randBLength = UnityEngine.Random.Range(1, 8);
+        int randSLength = UnityEngine.Random.Range(1, 8);
+
+        for (int i = 0; i < randBLength; i++)
+        {
+            bornInputfield.text += UnityEngine.Random.Range(1, 8);
+        }
+        for (int i = 0; i < randSLength; i++)
+        {
+            surviveInputfield.text += UnityEngine.Random.Range(1, 8);
+        }
+    }
+
     public void UpdateCustom()
     {
         int[,] newCells = new int[width, height];
