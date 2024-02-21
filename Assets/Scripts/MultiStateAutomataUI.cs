@@ -24,6 +24,21 @@ public class MultiStateAutomataUI : MonoBehaviour
 
     public GameObject viewRuleUI;
 
+    public Button SaveButton;
+    public Button LoadButton;
+    public TMP_InputField SaveLoadInputfield;
+
+    private void Update() {
+        if (SaveLoadInputfield.text != "")
+        {
+            SaveButton.interactable = LoadButton.interactable = true;
+        }
+        else
+        {
+            SaveButton.interactable = LoadButton.interactable = false;
+        }
+    }
+
     public void CreateRule()
     {
         newRule = new CustomRule{
@@ -156,14 +171,14 @@ public class MultiStateAutomataUI : MonoBehaviour
     {
         CustomRuleList ruleList = new CustomRuleList { rules = manager.customRules };
         string json = JsonUtility.ToJson(ruleList);
-        File.WriteAllText("rules.json", json);
+        File.WriteAllText(SaveLoadInputfield.text + ".json", json);
     }
 
     public void LoadRules()
     {
-        if (File.Exists("rules.json"))
+        if (File.Exists(SaveLoadInputfield.text + ".json"))
         {
-            string json = File.ReadAllText("rules.json");
+            string json = File.ReadAllText(SaveLoadInputfield.text + ".json");
             CustomRuleList ruleList = JsonUtility.FromJson<CustomRuleList>(json);
 
             for (int i = 0; i < ruleList.rules.Count; i++)
