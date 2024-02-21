@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.IO;
 
 public enum CellState { Black_0, White_1, Red_2, Green_3, Blue_4 } // Add more states as needed
 
@@ -23,6 +24,8 @@ public class MultipleStateAutomataManager : MonoBehaviour {
     public Slider densitySlider;
     public Slider delaySlider;
     public TMP_Dropdown cellToDrawDropdown;
+    public Button saveImageButton;
+    public TMP_InputField saveImageInputfield;
 
     [Header("Controls")]
     [Range(0, 1)]
@@ -110,6 +113,15 @@ public class MultipleStateAutomataManager : MonoBehaviour {
             }
         }
         HandleControls();
+
+        if (saveImageInputfield.text != "")
+        {
+            saveImageButton.interactable = true;
+        }
+        else
+        {
+            saveImageButton.interactable = false;
+        }
     }
 
     void UpdateCustom() {
@@ -166,5 +178,15 @@ public class MultipleStateAutomataManager : MonoBehaviour {
             cells[(int)pixelUV.x, (int)pixelUV.y] = cellValue;
             Render();
         }
+    }
+
+    public void SaveTextureAsImage()
+    {
+        byte[] bytes = texture.EncodeToPNG();
+        var dirPath = Application.dataPath + "/../SavedImages/";
+        if(!Directory.Exists(dirPath)) {
+            Directory.CreateDirectory(dirPath);
+        }
+        File.WriteAllBytes(dirPath + saveImageInputfield.text + ".png", bytes);
     }
 }

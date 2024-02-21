@@ -169,9 +169,10 @@ public class MultiStateAutomataUI : MonoBehaviour
 
     public void SaveRules()
     {
+        var dirPath = Application.dataPath + "/../SavedRules/";
         CustomRuleList ruleList = new CustomRuleList { rules = manager.customRules };
         string json = JsonUtility.ToJson(ruleList);
-        File.WriteAllText(SaveLoadInputfield.text + ".json", json);
+        File.WriteAllText(dirPath + SaveLoadInputfield.text + ".json", json);
     }
 
     public void LoadRules()
