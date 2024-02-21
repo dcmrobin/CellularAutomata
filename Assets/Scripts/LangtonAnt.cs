@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 
 public class LangtonAnt : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class LangtonAnt : MonoBehaviour
     [Header("UI")]
     public Slider delaySlider;
     public Toggle fourtyFiveDegreeToggle;
+    public GameObject antsListScrollview;
+    public GameObject UIAntPrefab;
 
     [Header("Controls")]
     public int width = 100;
@@ -49,6 +52,10 @@ public class LangtonAnt : MonoBehaviour
         ant.direction = Random.Range(0, 4);
         ants.Add(ant);
         Render();
+
+        GameObject newAntGameObject = Instantiate(UIAntPrefab, antsListScrollview.transform.Find("Viewport").Find("Content"));
+        newAntGameObject.transform.Find("Text").GetComponent<TMP_Text>().text = "Ant " + ants.Count;
+        newAntGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteAnt(newAntGameObject.transform.GetSiblingIndex()));
     }
 
     public void GenerateRandomAnt()
@@ -59,6 +66,22 @@ public class LangtonAnt : MonoBehaviour
         ant.direction = Random.Range(0, 4);
         ants.Add(ant);
         Render();
+
+        GameObject newAntGameObject = Instantiate(UIAntPrefab, antsListScrollview.transform.Find("Viewport").Find("Content"));
+        newAntGameObject.transform.Find("Text").GetComponent<TMP_Text>().text = "Ant " + ants.Count;
+        newAntGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteAnt(newAntGameObject.transform.GetSiblingIndex()));
+    }
+
+    public void DeleteAnt(int n)
+    {
+        ants.RemoveAt(n);
+        for (int i = 0; i < antsListScrollview.transform.Find("Viewport").Find("Content").childCount; i++)
+        {
+            if (!antsListScrollview.transform.Find("Viewport").Find("Content").GetChild(i).gameObject.activeSelf)
+            {
+                Destroy(antsListScrollview.transform.Find("Viewport").Find("Content").GetChild(i).gameObject);
+            }
+        }
     }
 
     public void Clear()
