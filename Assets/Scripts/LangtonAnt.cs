@@ -93,6 +93,12 @@ public class LangtonAnt : MonoBehaviour
                 cells[x, y] = 0;
             }
         }
+
+        for (int i = 0; i < antsListScrollview.transform.Find("Viewport").Find("Content").childCount; i++)
+        {
+            Destroy(antsListScrollview.transform.Find("Viewport").Find("Content").GetChild(i).gameObject);
+        }
+
         ants.Clear();
         GenerateStartingAnt();
         Render();
