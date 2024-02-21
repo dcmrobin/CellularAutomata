@@ -45,6 +45,7 @@
      <Compile Include="Assets\Scripts\CustomAutomataManager.cs" />
      <Compile Include="Assets\Scripts\Loader.cs" />
      <Compile Include="Assets\Scripts\LifeManager.cs" />
+     <Compile Include="Assets\Scripts\LangtonAnt.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

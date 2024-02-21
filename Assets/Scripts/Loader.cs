@@ -10,6 +10,7 @@ public class Loader : MonoBehaviour
     public int lifeSceneIndex = 1;
     public int customAutomataSceneIndex = 2;
     public int multicolorAutomataSceneIndex = 3;
+    public int langtonAntSceneIndex = 4;
 
     public void LoadMenu()
     {
@@ -29,5 +30,10 @@ public class Loader : MonoBehaviour
     public void LoadMulticolor()
     {
         SceneManager.LoadScene(multicolorAutomataSceneIndex);
+    }
+
+    public void LoadLangtonAnt()
+    {
+        SceneManager.LoadScene(langtonAntSceneIndex);
     }
 }
