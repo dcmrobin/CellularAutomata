@@ -122,7 +122,7 @@ public class LangtonAnt : MonoBehaviour
         antY = (antY + height) % height;
 
         // Place the ant on the new position
-        cells[antX, antY] = 2;
+        //cells[antX, antY] = 2;
 
         // Render the updated grid
         Render();
