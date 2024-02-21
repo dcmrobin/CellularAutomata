@@ -39,8 +39,7 @@ public class LangtonAnt : MonoBehaviour
     {
         antX = width / 2;
         antY = height / 2;
-        currentDirection = 0; // Initially, the ant faces up
-        cells[antX, antY] = 2; // Place the ant on the grid
+        currentDirection = Random.Range(0, 4);
         Render();
     }
 
@@ -120,9 +119,6 @@ public class LangtonAnt : MonoBehaviour
         // Ensure the ant wraps around the grid if it reaches the edge
         antX = (antX + width) % width;
         antY = (antY + height) % height;
-
-        // Place the ant on the new position
-        //cells[antX, antY] = 2;
 
         // Render the updated grid
         Render();
