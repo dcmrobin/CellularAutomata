@@ -10,6 +10,7 @@ public class LangtonAnt : MonoBehaviour
 
     [Header("UI")]
     public Slider delaySlider;
+    public Toggle fourtyFiveDegreeToggle;
 
     [Header("Controls")]
     public int width = 100;
@@ -91,29 +92,80 @@ public class LangtonAnt : MonoBehaviour
         if (currentCellValue == 0) // If the cell is black
         {
             cells[antX, antY] = 1; // Change the color to white
-            currentDirection = (currentDirection + 1) % 4; // Turn 90 degrees clockwise
+            if (fourtyFiveDegreeToggle.isOn)
+            {
+                currentDirection = (currentDirection + 1) % 8; // Turn 45 degrees clockwise
+            }
+            else
+            {
+                currentDirection = (currentDirection + 1) % 4; // Turn 90 degrees clockwise
+            }
         }
         else // If the cell is white
         {
             cells[antX, antY] = 0; // Change the color to black
-            currentDirection = (currentDirection - 1 + 4) % 4; // Turn 90 degrees counter-clockwise
+            if (fourtyFiveDegreeToggle.isOn)
+            {
+                currentDirection = (currentDirection - 1 + 8) % 8; // Turn 45 degrees counter-clockwise
+            }
+            else
+            {
+                currentDirection = (currentDirection - 1 + 4) % 4; // Turn 90 degrees counter-clockwise
+            }
         }
 
         // Move the ant forward in the direction it's facing
-        switch (currentDirection)
+        if (fourtyFiveDegreeToggle.isOn)
         {
-            case 0: // up
-                antY++;
-                break;
-            case 1: // right
-                antX++;
-                break;
-            case 2: // down
-                antY--;
-                break;
-            case 3: // left
-                antX--;
-                break;
+            switch (currentDirection)
+            {
+                case 0: // up
+                    antY++;
+                    break;
+                case 1: // upper right
+                    antX++;
+                    antY++;
+                    break;
+                case 2: // right
+                    antX++;
+                    break;
+                case 3: // lower right
+                    antX++;
+                    antY--;
+                    break;
+                case 4: // down
+                    antY--;
+                    break;
+                case 5: // lower left
+                    antX--;
+                    antY--;
+                    break;
+                case 6: // left
+                    antX--;
+                    break;
+                case 7: // upper left
+                    antX--;
+                    antY++;
+                    break;
+            }
+        }
+        else
+        {
+            switch (currentDirection)
+            {
+                case 0: // up
+                    antY++;
+                    break;
+                case 1: // right
+                    antX++;
+                    break;
+                case 2: // down
+                    antY--;
+                    break;
+                case 3: // left
+                    antX--;
+                    break;
+            }
         }
 
         // Ensure the ant wraps around the grid if it reaches the edge
