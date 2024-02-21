@@ -1,17 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
-using System;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 
 public class LangtonAnt : MonoBehaviour
 {
     int[,] cells;
+    int antX;
+    int antY;
+    int currentDirection; // 0: up, 1: right, 2: down, 3: left
 
     [Header("UI")]
     public Slider delaySlider;
@@ -20,16 +15,17 @@ public class LangtonAnt : MonoBehaviour
     public int width = 100;
     public int height = 100;
     public bool paused;
-    public float updateDelay = 3;
+    public float updateDelay = 0.5f;
     float delay;
     Texture2D texture;
     GameObject plane;
     RaycastHit hit;
 
-    public void Start() {
+    public void Start()
+    {
         delaySlider.value = delay = updateDelay;
         cells = new int[width, height];
-        texture = new(width, height);
+        texture = new Texture2D(width, height);
         texture.filterMode = FilterMode.Point;
 
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -41,7 +37,10 @@ public class LangtonAnt : MonoBehaviour
 
     public void GenerateAnt()
     {
-        cells[50, 50] = 2;
+        antX = width / 2;
+        antY = height / 2;
+        currentDirection = 0; // Initially, the ant faces up
+        cells[antX, antY] = 2; // Place the ant on the grid
         Render();
     }
 
@@ -72,10 +71,11 @@ public class LangtonAnt : MonoBehaviour
         texture.Apply();
     }
 
-    public void Update() {
+    public void Update()
+    {
         if (!paused)
         {
-            delay -= .1f;
+            delay -= Time.deltaTime;
             if (delay <= 0)
             {
                 UpdateAnt();
@@ -88,7 +88,41 @@ public class LangtonAnt : MonoBehaviour
 
     public void UpdateAnt()
     {
-        //here please
+        int currentCellValue = cells[antX, antY];
+        if (currentCellValue == 0) // If the cell is black
+        {
+            cells[antX, antY] = 1; // Change the color to white
+            currentDirection = (currentDirection + 1) % 4; // Turn 90 degrees clockwise
+        }
+        else // If the cell is white
+        {
+            cells[antX, antY] = 0; // Change the color to black
+            currentDirection = (currentDirection - 1 + 4) % 4; // Turn 90 degrees counter-clockwise
+        }
+
+        // Move the ant forward in the direction it's facing
+        switch (currentDirection)
+        {
+            case 0: // up
+                antY++;
+                break;
+            case 1: // right
+                antX++;
+                break;
+            case 2: // down
+                antY--;
+                break;
+            case 3: // left
+                antX--;
+                break;
+        }
+
+        // Ensure the ant wraps around the grid if it reaches the edge
+        antX = (antX + width) % width;
+        antY = (antY + height) % height;
+
+        // Place the ant on the new position
+        cells[antX, antY] = 2;
 
         // Render the updated grid
         Render();
