@@ -1,12 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class LangtonAnt : MonoBehaviour
 {
+    struct Ant
+    {
+        public int x;
+        public int y;
+        public int direction;
+    }
+
     int[,] cells;
-    int antX;
-    int antY;
-    int currentDirection; // 0: up, 1: right, 2: down, 3: left
+    List<Ant> ants = new List<Ant>(); // List to hold multiple ants
 
     [Header("UI")]
     public Slider delaySlider;
@@ -32,15 +38,26 @@ public class LangtonAnt : MonoBehaviour
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.Rotate(-90, 0, 0);
         plane.GetComponent<MeshRenderer>().material.mainTexture = texture;
-
-        GenerateAnt();
+        GenerateStartingAnt();
     }
 
-    public void GenerateAnt()
+    public void GenerateStartingAnt()
     {
-        antX = width / 2;
-        antY = height / 2;
-        currentDirection = Random.Range(0, 4);
+        Ant ant;
+        ant.x = width / 2;
+        ant.y = height / 2;
+        ant.direction = Random.Range(0, 4);
+        ants.Add(ant);
+        Render();
+    }
+
+    public void GenerateRandomAnt()
+    {
+        Ant ant;
+        ant.x = Random.Range(0, width);
+        ant.y = Random.Range(0, height);
+        ant.direction = Random.Range(0, 4);
+        ants.Add(ant);
         Render();
     }
 
@@ -53,7 +70,8 @@ public class LangtonAnt : MonoBehaviour
                 cells[x, y] = 0;
             }
         }
-        GenerateAnt();
+        ants.Clear();
+        GenerateStartingAnt();
         Render();
     }
 
@@ -78,7 +96,7 @@ public class LangtonAnt : MonoBehaviour
             delay -= Time.deltaTime;
             if (delay <= 0)
             {
-                UpdateAnt();
+                UpdateAnts(); // Update all ants
                 delay = delaySlider.value;
             }
         }
@@ -86,94 +104,107 @@ public class LangtonAnt : MonoBehaviour
         HandleControls();
     }
 
-    public void UpdateAnt()
+    public void UpdateAnts()
     {
-        int currentCellValue = cells[antX, antY];
-        if (currentCellValue == 0) // If the cell is black
+        for (int i = 0; i < ants.Count; i++)
         {
-            cells[antX, antY] = 1; // Change the color to white
-            if (fourtyFiveDegreeToggle.isOn)
+            Ant ant = ants[i];
+            int currentCellValue = cells[ant.x, ant.y];
+            if (currentCellValue == 0) // If the cell is black
             {
-                currentDirection = (currentDirection + 1) % 8; // Turn 45 degrees clockwise
+                cells[ant.x, ant.y] = 1; // Change the color to white
+                if (fourtyFiveDegreeToggle.isOn)
+                {
+                    ant.direction = (ant.direction + 1) % 8; // Turn 45 degrees clockwise
+                }
+                else
+                {
+                    ant.direction = (ant.direction + 1) % 4; // Turn 90 degrees clockwise
+                }
             }
-            else
+            else // If the cell is white
             {
-                currentDirection = (currentDirection + 1) % 4; // Turn 90 degrees clockwise
+                cells[ant.x, ant.y] = 0; // Change the color to black
+                if (fourtyFiveDegreeToggle.isOn)
+                {
+                    ant.direction = (ant.direction - 1 + 8) % 8; // Turn 45 degrees counter-clockwise
+                }
+                else
+                {
+                    ant.direction = (ant.direction - 1 + 4) % 4; // Turn 90 degrees counter-clockwise
+                }
             }
-        }
-        else // If the cell is white
-        {
-            cells[antX, antY] = 0; // Change the color to black
-            if (fourtyFiveDegreeToggle.isOn)
-            {
-                currentDirection = (currentDirection - 1 + 8) % 8; // Turn 45 degrees counter-clockwise
-            }
-            else
-            {
-                currentDirection = (currentDirection - 1 + 4) % 4; // Turn 90 degrees counter-clockwise
-            }
+
+            // Move the ant forward in the direction it's facing
+            MoveAntForward(ref ant);
+
+            // Ensure the ant wraps around the grid if it reaches the edge
+            ant.x = (ant.x + width) % width;
+            ant.y = (ant.y + height) % height;
+
+            // Update the ant back into the list
+            ants[i] = ant;
         }
 
+        // Render the updated grid
+        Render();
+    }
+
+    void MoveAntForward(ref Ant ant)
+    {
         // Move the ant forward in the direction it's facing
         if (fourtyFiveDegreeToggle.isOn)
         {
-            switch (currentDirection)
+            switch (ant.direction)
             {
                 case 0: // up
-                    antY++;
+                    ant.y++;
                     break;
                 case 1: // upper right
-                    antX++;
-                    antY++;
+                    ant.x++;
+                    ant.y++;
                     break;
                 case 2: // right
-                    antX++;
+                    ant.x++;
                     break;
                 case 3: // lower right
-                    antX++;
-                    antY--;
+                    ant.x++;
+                    ant.y--;
                     break;
                 case 4: // down
-                    antY--;
+                    ant.y--;
                     break;
                 case 5: // lower left
-                    antX--;
-                    antY--;
+                    ant.x--;
+                    ant.y--;
                     break;
                 case 6: // left
-                    antX--;
+                    ant.x--;
                     break;
                 case 7: // upper left
-                    antX--;
-                    antY++;
+                    ant.x--;
+                    ant.y++;
                     break;
             }
         }
         else
         {
-            switch (currentDirection)
+            switch (ant.direction)
             {
                 case 0: // up
-                    antY++;
+                    ant.y++;
                     break;
                 case 1: // right
-                    antX++;
+                    ant.x++;
                     break;
                 case 2: // down
-                    antY--;
+                    ant.y--;
                     break;
                 case 3: // left
-                    antX--;
+                    ant.x--;
                     break;
             }
         }
-
-        // Ensure the ant wraps around the grid if it reaches the edge
-        antX = (antX + width) % width;
-        antY = (antY + height) % height;
-
-        // Render the updated grid
-        Render();
     }
 
     public void HandleControls()
