@@ -165,7 +165,11 @@ public class MultiStateAutomataUI : MonoBehaviour
         {
             string json = File.ReadAllText("rules.json");
             CustomRuleList ruleList = JsonUtility.FromJson<CustomRuleList>(json);
-            manager.customRules = ruleList.rules;
+
+            for (int i = 0; i < ruleList.rules.Count; i++)
+            {
+                CreateRuleArgs(ruleList.rules[i].NeighborCountsToTriggerRule, ruleList.rules[i].NeighborStatesToTriggerRule, (int)ruleList.rules[i].OriginalState, (int)ruleList.rules[i].TargetState);
+            }
         }
     }
 }
