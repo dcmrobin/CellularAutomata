@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.IO;
+
+[Serializable]
+public class CustomRuleList
+{
+    public List<CustomRule> rules;
+}
 
 public class MultiStateAutomataUI : MonoBehaviour
 {
@@ -143,5 +150,22 @@ public class MultiStateAutomataUI : MonoBehaviour
         }
 
         return string.Join("n", stringArray);
+    }
+
+    public void SaveRules()
+    {
+        CustomRuleList ruleList = new CustomRuleList { rules = manager.customRules };
+        string json = JsonUtility.ToJson(ruleList);
+        File.WriteAllText("rules.json", json);
+    }
+
+    public void LoadRules()
+    {
+        if (File.Exists("rules.json"))
+        {
+            string json = File.ReadAllText("rules.json");
+            CustomRuleList ruleList = JsonUtility.FromJson<CustomRuleList>(json);
+            manager.customRules = ruleList.rules;
+        }
     }
 }
