@@ -19,6 +19,7 @@ public class LangtonAnt : MonoBehaviour
     [Header("UI")]
     public Slider delaySlider;
     public Toggle loopsToggle;
+    public Toggle lifeToggle;
     public GameObject antsListScrollview;
     public GameObject UIAntPrefab;
     public GameObject UIAntPanel;
@@ -150,6 +151,10 @@ public class LangtonAnt : MonoBehaviour
             if (delay <= 0)
             {
                 UpdateAnts(); // Update all ants
+                if (lifeToggle.isOn)
+                {
+                    UpdateLife();
+                }
                 delay = delaySlider.value;
             }
         }
@@ -258,6 +263,72 @@ public class LangtonAnt : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void UpdateLife()
+    {
+        int[,] newCells = new int[width, height];
+
+        // Iterate over all cells
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                // Get the number of alive neighbors for the current cell
+                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
+
+                // Apply Conway's rules
+                if (cells[x, y] == 1) // If the cell is alive
+                {
+                    if (aliveNeighbours < 2 || aliveNeighbours > 3)
+                    {
+                        // Any live cell with fewer than two live neighbors dies, or with more than three live neighbors dies
+                        newCells[x, y] = 0;
+                    }
+                    else
+                    {
+                        // Any live cell with two or three live neighbors lives on to the next generation
+                        newCells[x, y] = 1;
+                    }
+                }
+                else // If the cell is dead
+                {
+                    if (aliveNeighbours == 3)
+                    {
+                        // Any dead cell with exactly three live neighbors becomes a live cell
+                        newCells[x, y] = 1;
+                    }
+                    else
+                    {
+                        // Dead cells remain dead
+                        newCells[x, y] = 0;
+                    }
+                }
+            }
+        }
+
+        // Update the cells array with the new state
+        cells = newCells;
+
+        // Render the updated grid
+        Render();
+    }
+
+    int GetSurroundingAliveCellCount(int gridX, int gridY)
+    {
+        int aliveCellCount = 0;
+        for (int offsetX = -1; offsetX <= 1; offsetX++)
+        {
+            for (int offsetY = -1; offsetY <= 1; offsetY++)
+            {
+                int neighbourX = (gridX + offsetX + width) % width;
+                int neighbourY = (gridY + offsetY + height) % height;
+                aliveCellCount += cells[neighbourX, neighbourY];
+            }
+        }
+        // Subtract the central cell's value because it was added in the loop
+        aliveCellCount -= cells[gridX, gridY];
+        return aliveCellCount;
     }
 
     public void HandleControls()
