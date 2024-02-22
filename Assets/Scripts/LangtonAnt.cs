@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class LangtonAnt : MonoBehaviour
 {
@@ -33,6 +34,17 @@ public class LangtonAnt : MonoBehaviour
 
     public void Start()
     {
+        if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
+        {
+            width = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
+            height = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
+        }
+        else
+        {
+            width = 100;
+            height = 100;
+        }
+
         delaySlider.value = delay = updateDelay;
         cells = new int[width, height];
         texture = new Texture2D(width, height);
@@ -49,7 +61,7 @@ public class LangtonAnt : MonoBehaviour
         Ant ant;
         ant.x = width / 2;
         ant.y = height / 2;
-        ant.direction = Random.Range(0, 4);
+        ant.direction = UnityEngine.Random.Range(0, 4);
         ants.Add(ant);
         Render();
 
@@ -61,9 +73,9 @@ public class LangtonAnt : MonoBehaviour
     public void GenerateRandomAnt()
     {
         Ant ant;
-        ant.x = Random.Range(0, width);
-        ant.y = Random.Range(0, height);
-        ant.direction = Random.Range(0, 4);
+        ant.x = UnityEngine.Random.Range(0, width);
+        ant.y = UnityEngine.Random.Range(0, height);
+        ant.direction = UnityEngine.Random.Range(0, 4);
         ants.Add(ant);
         Render();
 

@@ -33,6 +33,17 @@ public class Manager : MonoBehaviour
     RaycastHit hit;
 
     public void Start() {
+        if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
+        {
+            width = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
+            height = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
+        }
+        else
+        {
+            width = 100;
+            height = 100;
+        }
+
         densitySlider.value = density;
         delaySlider.value = delay = updateDelay;
         cells = new int[width, height];

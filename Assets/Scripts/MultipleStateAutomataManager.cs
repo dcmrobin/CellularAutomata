@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
 using System.IO;
 
 public enum CellState { Black_0, White_1, Red_2, Green_3, Blue_4 } // Add more states as needed
@@ -41,6 +42,17 @@ public class MultipleStateAutomataManager : MonoBehaviour {
     Camera mainCamera;
 
     void Start() {
+        if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
+        {
+            width = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
+            height = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
+        }
+        else
+        {
+            width = 100;
+            height = 100;
+        }
+
         mainCamera = Camera.main;
         densitySlider.value = density;
         delaySlider.value = delay = updateDelay;
@@ -61,7 +73,7 @@ public class MultipleStateAutomataManager : MonoBehaviour {
     void GenerateRandomCells() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                int randInt = Random.Range(1, 4);
+                int randInt = UnityEngine.Random.Range(1, 4);
                 cells[x, y] = (UnityEngine.Random.value < densitySlider.value) ? randInt : 0;
             }
         }
