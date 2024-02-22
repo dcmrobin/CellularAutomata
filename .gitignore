@@ -2,4 +2,5 @@ Library
 ProjectSettings
 Temp
 /UserSettings
-/UserSettings/Layouts/*
+/UserSettings/Layouts/
+/Logs/
