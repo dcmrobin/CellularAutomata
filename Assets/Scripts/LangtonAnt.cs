@@ -18,7 +18,6 @@ public class LangtonAnt : MonoBehaviour
 
     [Header("UI")]
     public Slider delaySlider;
-    public Toggle fourtyFiveDegreeToggle;
     public GameObject antsListScrollview;
     public GameObject UIAntPrefab;
     public GameObject UIAntPanel;
@@ -165,27 +164,13 @@ public class LangtonAnt : MonoBehaviour
             int currentCellValue = cells[ant.x, ant.y];
             if (currentCellValue == 0) // If the cell is black
             {
-                cells[ant.x, ant.y] = 1; // Change the color to white
-                if (fourtyFiveDegreeToggle.isOn)
-                {
-                    ant.direction = (ant.direction + 1) % 8; // Turn 45 degrees clockwise
-                }
-                else
-                {
-                    ant.direction = (ant.direction + 1) % 4; // Turn 90 degrees clockwise
-                }
+                cells[ant.x, ant.y] = 1;
+                ant.direction = (ant.direction + 1) % 4; // Turn 90 degrees clockwise
             }
             else // If the cell is white
             {
-                cells[ant.x, ant.y] = 0; // Change the color to black
-                if (fourtyFiveDegreeToggle.isOn)
-                {
-                    ant.direction = (ant.direction - 1 + 8) % 8; // Turn 45 degrees counter-clockwise
-                }
-                else
-                {
-                    ant.direction = (ant.direction - 1 + 4) % 4; // Turn 90 degrees counter-clockwise
-                }
+                cells[ant.x, ant.y] = 0;
+                ant.direction = (ant.direction - 1 + 4) % 4; // Turn 90 degrees counter-clockwise
             }
 
             // Move the ant forward in the direction it's facing
@@ -205,58 +190,20 @@ public class LangtonAnt : MonoBehaviour
 
     void MoveAntForward(ref Ant ant)
     {
-        // Move the ant forward in the direction it's facing
-        if (fourtyFiveDegreeToggle.isOn)
+        switch (ant.direction)
         {
-            switch (ant.direction)
-            {
-                case 0: // up
-                    ant.y++;
-                    break;
-                case 1: // upper right
-                    ant.x++;
-                    ant.y++;
-                    break;
-                case 2: // right
-                    ant.x++;
-                    break;
-                case 3: // lower right
-                    ant.x++;
-                    ant.y--;
-                    break;
-                case 4: // down
-                    ant.y--;
-                    break;
-                case 5: // lower left
-                    ant.x--;
-                    ant.y--;
-                    break;
-                case 6: // left
-                    ant.x--;
-                    break;
-                case 7: // upper left
-                    ant.x--;
-                    ant.y++;
-                    break;
-            }
-        }
-        else
-        {
-            switch (ant.direction)
-            {
-                case 0: // up
-                    ant.y++;
-                    break;
-                case 1: // right
-                    ant.x++;
-                    break;
-                case 2: // down
-                    ant.y--;
-                    break;
-                case 3: // left
-                    ant.x--;
-                    break;
-            }
+            case 0: // up
+                ant.y++;
+                break;
+            case 1: // right
+                ant.x++;
+                break;
+            case 2: // down
+                ant.y--;
+                break;
+            case 3: // left
+                ant.x--;
+                break;
         }
     }
 
