@@ -55,6 +55,7 @@ public class LangtonAnt : MonoBehaviour
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.Rotate(-90, 0, 0);
         plane.GetComponent<MeshRenderer>().material.mainTexture = texture;
+        plane.GetComponent<MeshRenderer>().material.SetFloat("_Glossiness", 0);
         GenerateStartingAnt();
     }
 
@@ -136,7 +137,17 @@ public class LangtonAnt : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                colors[x + y * width] = (cells[x, y] == 1) ? Color.white : (cells[x, y] == 0 ? Color.black : Color.red);
+                for (int i = 0; i < ants.Count; i++)
+                {
+                    if (x == ants[i].x && y == ants[i].y)
+                    {
+                        colors[x + y * width] = Color.red;
+                    }
+                    else
+                    {
+                        colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
+                    }
+                }
             }
         }
         texture.SetPixels(colors);

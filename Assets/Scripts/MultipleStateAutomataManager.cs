@@ -63,6 +63,7 @@ public class MultipleStateAutomataManager : MonoBehaviour {
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.Rotate(-90, 0, 0);
         plane.GetComponent<MeshRenderer>().material.mainTexture = texture;
+        plane.GetComponent<MeshRenderer>().material.SetFloat("_Glossiness", 0);
 
         cellToDrawDropdown.AddOptions(new List<string>(System.Enum.GetNames(typeof(CellState))));
         cellToDrawDropdown.value = 1;

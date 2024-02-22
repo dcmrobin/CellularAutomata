@@ -53,6 +53,7 @@ public class Manager : MonoBehaviour
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.Rotate(-90, 0, 0);
         plane.GetComponent<MeshRenderer>().material.mainTexture = texture;
+        plane.GetComponent<MeshRenderer>().material.SetFloat("_Glossiness", 0);
 
         GenerateRandomCells();
     }
