@@ -11,6 +11,7 @@ public class LangtonAnt : MonoBehaviour
         public int x;
         public int y;
         public int direction;
+        public int stepsTaken;
     }
 
     int[,] cells;
@@ -65,6 +66,7 @@ public class LangtonAnt : MonoBehaviour
         ant.x = width / 2;
         ant.y = height / 2;
         ant.direction = UnityEngine.Random.Range(0, 4);
+        ant.stepsTaken = 0;
         ants.Add(ant);
         Render();
 
@@ -81,6 +83,7 @@ public class LangtonAnt : MonoBehaviour
         ant.x = UnityEngine.Random.Range(0, width);
         ant.y = UnityEngine.Random.Range(0, height);
         ant.direction = UnityEngine.Random.Range(0, 4);
+        ant.stepsTaken = 0;
         ants.Add(ant);
         Render();
 
@@ -96,6 +99,7 @@ public class LangtonAnt : MonoBehaviour
         UIAntPanel.SetActive(true);
         UIAntPanel.transform.Find("Position").Find("xy").GetComponent<TMP_Text>().text = "X: " + ants[index].x.ToString() + " Y: " + ants[index].y.ToString();
         UIAntPanel.transform.Find("Heading").Find("Direction").GetComponent<TMP_Text>().text = ants[index].direction.ToString();
+        UIAntPanel.transform.Find("StepsTaken").Find("Steps").GetComponent<TMP_Text>().text = ants[index].stepsTaken.ToString();
     }
 
     public void DeleteAnt(int n)
@@ -223,6 +227,7 @@ public class LangtonAnt : MonoBehaviour
             // Ensure the ant wraps around the grid if it reaches the edge
             ant.x = (ant.x + width) % width;
             ant.y = (ant.y + height) % height;
+            ant.stepsTaken += 1;
 
             // Update the ant back into the list
             ants[i] = ant;
