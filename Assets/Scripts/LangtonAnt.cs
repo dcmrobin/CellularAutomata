@@ -21,6 +21,7 @@ public class LangtonAnt : MonoBehaviour
     public Toggle fourtyFiveDegreeToggle;
     public GameObject antsListScrollview;
     public GameObject UIAntPrefab;
+    public GameObject UIAntPanel;
 
     [Header("Controls")]
     public int width = 100;
@@ -66,8 +67,10 @@ public class LangtonAnt : MonoBehaviour
         Render();
 
         GameObject newAntGameObject = Instantiate(UIAntPrefab, antsListScrollview.transform.Find("Viewport").Find("Content"));
+        newAntGameObject.name = ants.Count.ToString();
         newAntGameObject.transform.Find("Text").GetComponent<TMP_Text>().text = "Ant " + ants.Count;
         newAntGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteAnt(newAntGameObject.transform.GetSiblingIndex()));
+        newAntGameObject.GetComponent<Button>().onClick.AddListener(() => ViewAnt(Convert.ToInt32(newAntGameObject.name)-1));
     }
 
     public void GenerateRandomAnt()
@@ -80,8 +83,16 @@ public class LangtonAnt : MonoBehaviour
         Render();
 
         GameObject newAntGameObject = Instantiate(UIAntPrefab, antsListScrollview.transform.Find("Viewport").Find("Content"));
+        newAntGameObject.name = ants.Count.ToString();
         newAntGameObject.transform.Find("Text").GetComponent<TMP_Text>().text = "Ant " + ants.Count;
         newAntGameObject.transform.Find("deleteButton").GetComponent<Button>().onClick.AddListener(() => DeleteAnt(newAntGameObject.transform.GetSiblingIndex()));
+        newAntGameObject.GetComponent<Button>().onClick.AddListener(() => ViewAnt(Convert.ToInt32(newAntGameObject.name)-1));
+    }
+
+    public void ViewAnt(int index)
+    {
+        UIAntPanel.SetActive(true);
+        UIAntPanel.transform.Find("Position").Find("xy").GetComponent<TMP_Text>().text = "X: " + ants[index].x.ToString() + " Y: " + ants[index].y.ToString();
     }
 
     public void DeleteAnt(int n)
