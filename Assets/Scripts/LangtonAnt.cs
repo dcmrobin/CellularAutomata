@@ -133,23 +133,31 @@ public class LangtonAnt : MonoBehaviour
     public void Render()
     {
         Color[] colors = new Color[width * height];
+        
+        // Set all colors to black initially
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i] = Color.black;
+        }
+
+        // Render ants
+        foreach (var ant in ants)
+        {
+            colors[ant.x + ant.y * width] = Color.red;
+        }
+
+        // Render cells
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                for (int i = 0; i < ants.Count; i++)
+                if (cells[x, y] == 1)
                 {
-                    if (x == ants[i].x && y == ants[i].y)
-                    {
-                        colors[x + y * width] = Color.red;
-                    }
-                    else
-                    {
-                        colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
-                    }
+                    colors[x + y * width] = Color.white;
                 }
             }
         }
+
         texture.SetPixels(colors);
         texture.Apply();
     }
