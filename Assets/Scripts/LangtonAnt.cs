@@ -93,6 +93,7 @@ public class LangtonAnt : MonoBehaviour
     {
         UIAntPanel.SetActive(true);
         UIAntPanel.transform.Find("Position").Find("xy").GetComponent<TMP_Text>().text = "X: " + ants[index].x.ToString() + " Y: " + ants[index].y.ToString();
+        UIAntPanel.transform.Find("Heading").Find("Direction").GetComponent<TMP_Text>().text = ants[index].direction.ToString();
     }
 
     public void DeleteAnt(int n)
