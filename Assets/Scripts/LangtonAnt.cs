@@ -133,25 +133,30 @@ public class LangtonAnt : MonoBehaviour
     public void Render()
     {
         Color[] colors = new Color[width * height];
+        bool[,] antPositions = new bool[width, height]; // Track positions of ants
         
-        // Set all colors to black initially
+        // Clear colors
         for (int i = 0; i < colors.Length; i++)
         {
             colors[i] = Color.black;
         }
-
-        // Render ants
+        
+        // Mark ant positions
         foreach (var ant in ants)
         {
-            colors[ant.x + ant.y * width] = Color.red;
+            antPositions[ant.x, ant.y] = true;
         }
 
-        // Render cells
+        // Render ants
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if (cells[x, y] == 1)
+                if (antPositions[x, y])
+                {
+                    colors[x + y * width] = Color.red;
+                }
+                else if (cells[x, y] == 1)
                 {
                     colors[x + y * width] = Color.white;
                 }
