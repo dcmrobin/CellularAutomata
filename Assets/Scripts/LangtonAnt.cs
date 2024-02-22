@@ -18,7 +18,7 @@ public class LangtonAnt : MonoBehaviour
 
     [Header("UI")]
     public Slider delaySlider;
-    public Toggle fourtyFiveDegreeToggle;
+    public Toggle loopsToggle;
     public GameObject antsListScrollview;
     public GameObject UIAntPrefab;
     public GameObject UIAntPanel;
@@ -166,7 +166,7 @@ public class LangtonAnt : MonoBehaviour
             if (currentCellValue == 0) // If the cell is black
             {
                 cells[ant.x, ant.y] = 1; // Change the color to white
-                if (fourtyFiveDegreeToggle.isOn)
+                if (loopsToggle.isOn)
                 {
                     ant.direction = (ant.direction + 1) % 8; // Turn 45 degrees clockwise
                 }
@@ -178,7 +178,7 @@ public class LangtonAnt : MonoBehaviour
             else // If the cell is white
             {
                 cells[ant.x, ant.y] = 0; // Change the color to black
-                if (fourtyFiveDegreeToggle.isOn)
+                if (loopsToggle.isOn)
                 {
                     ant.direction = (ant.direction - 1 + 8) % 8; // Turn 45 degrees counter-clockwise
                 }
@@ -206,7 +206,7 @@ public class LangtonAnt : MonoBehaviour
     void MoveAntForward(ref Ant ant)
     {
         // Move the ant forward in the direction it's facing
-        if (fourtyFiveDegreeToggle.isOn)
+        if (loopsToggle.isOn)
         {
             switch (ant.direction)
             {

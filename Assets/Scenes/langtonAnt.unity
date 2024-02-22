@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 45 degree turns
+  m_text: Loops
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2625,7 +2625,7 @@ GameObject:
   - component: {fileID: 1194185686}
   - component: {fileID: 1194185687}
   m_Layer: 5
-  m_Name: NinetyDegreeToggle
+  m_Name: LoopsToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3081,7 +3081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delaySlider: {fileID: 710113464}
-  fourtyFiveDegreeToggle: {fileID: 1194185687}
+  loopsToggle: {fileID: 1194185687}
   antsListScrollview: {fileID: 999057159}
   UIAntPrefab: {fileID: 768349266216881674, guid: 9063bbb304ec2ab4ebf9b7324e1d1fa2, type: 3}
   UIAntPanel: {fileID: 1909191529}
