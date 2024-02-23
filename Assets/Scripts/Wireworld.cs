@@ -14,6 +14,7 @@ public class Wireworld : MonoBehaviour
 
     [Header("UI")]
     public Slider delaySlider;
+    public TMP_Dropdown cellDrawTypeDropdown;
 
     [Header("Controls")]
     public int width = 50;
@@ -69,7 +70,7 @@ public class Wireworld : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
+                colors[x + y * width] = cells[x, y] == 1 ? Color.yellow : (cells[x, y] == 2 ? Color.cyan : (cells[x, y] == 3 ? Color.red : Color.black));
             }
         }
         texture.SetPixels(colors);
@@ -99,35 +100,37 @@ public class Wireworld : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                // Get the number of alive neighbors for the current cell
-                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
+                // Get the number of electron head neighbors for the current cell
+                int electronHeadNeighbors = GetSurroundingElectronHeadCount(x, y);
 
-                // Apply Conway's rules
-                if (cells[x, y] == 1) // If the cell is alive
+                // Apply Wireworld rules
+                if (cells[x, y] == 1) // If the cell is conductor
                 {
-                    if (aliveNeighbours < 2 || aliveNeighbours > 3)
+                    if (electronHeadNeighbors == 1 || electronHeadNeighbors == 2)
                     {
-                        // Any live cell with fewer than two live neighbors dies, or with more than three live neighbors dies
-                        newCells[x, y] = 0;
+                        // Empty cell with exactly one or two electron head neighbors becomes a conductor
+                        newCells[x, y] = 1;
                     }
                     else
                     {
-                        // Any live cell with two or three live neighbors lives on to the next generation
+                        // conductor cells remain conductor cells
                         newCells[x, y] = 1;
                     }
                 }
-                else // If the cell is dead
+                else if (cells[x, y] == 0) // If the cell is empty
                 {
-                    if (aliveNeighbours == 3)
-                    {
-                        // Any dead cell with exactly three live neighbors becomes a live cell
-                        newCells[x, y] = 1;
-                    }
-                    else
-                    {
-                        // Dead cells remain dead
-                        newCells[x, y] = 0;
-                    }
+                    // empty remains empty
+                    newCells[x, y] = 0;
+                }
+                else if (cells[x, y] == 2) // If the cell is an electron head
+                {
+                    // Electron heads become electron tails
+                    newCells[x, y] = 3;
+                }
+                else if (cells[x, y] == 3) // If the cell is an electron tail
+                {
+                    // Electron tails become conductors
+                    newCells[x, y] = 1;
                 }
             }
         }
@@ -139,21 +142,23 @@ public class Wireworld : MonoBehaviour
         Render();
     }
 
-    int GetSurroundingAliveCellCount(int gridX, int gridY)
+    int GetSurroundingElectronHeadCount(int gridX, int gridY)
     {
-        int aliveCellCount = 0;
+        int electronHeadCount = 0;
         for (int offsetX = -1; offsetX <= 1; offsetX++)
         {
             for (int offsetY = -1; offsetY <= 1; offsetY++)
             {
                 int neighbourX = (gridX + offsetX + width) % width;
                 int neighbourY = (gridY + offsetY + height) % height;
-                aliveCellCount += cells[neighbourX, neighbourY];
+                if (cells[neighbourX, neighbourY] == 2) // Electron head state
+                {
+                    electronHeadCount++;
+                }
             }
         }
-        // Subtract the central cell's value because it was added in the loop
-        aliveCellCount -= cells[gridX, gridY];
-        return aliveCellCount;
+        // Exclude the central cell from the count
+        return electronHeadCount - (cells[gridX, gridY] == 2 ? 1 : 0);
     }
 
     public void HandleControls()
@@ -163,7 +168,7 @@ public class Wireworld : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            SetCell(1);
+            SetCell(cellDrawTypeDropdown.value + 1);
         }
         else if (Input.GetMouseButton(1))
         {
