@@ -8,7 +8,7 @@ using System;
 using TMPro;
 using Unity.VisualScripting;
 
-public class Manager : MonoBehaviour
+public class LifeManager : MonoBehaviour
 {
     int[,] cells;
 

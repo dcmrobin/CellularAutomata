@@ -12,6 +12,7 @@ public class Loader : MonoBehaviour
     public int customAutomataSceneIndex = 2;
     public int multicolorAutomataSceneIndex = 3;
     public int langtonAntSceneIndex = 4;
+    public int wireworldSceneIndex = 5;
     public TMP_InputField sizeInputfield;
 
     private void Awake() {
@@ -47,5 +48,11 @@ public class Loader : MonoBehaviour
     {
         transform.Find("Panel").gameObject.SetActive(false);
         SceneManager.LoadScene(langtonAntSceneIndex);
+    }
+
+    public void LoadWireworld()
+    {
+        transform.Find("Panel").gameObject.SetActive(false);
+        SceneManager.LoadScene(wireworldSceneIndex);
     }
 }
