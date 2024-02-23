@@ -108,8 +108,8 @@ public class Wireworld : MonoBehaviour
                 {
                     if (electronHeadNeighbors == 1 || electronHeadNeighbors == 2)
                     {
-                        // Empty cell with exactly one or two electron head neighbors becomes a conductor
-                        newCells[x, y] = 1;
+                        // Conductor cell with exactly one or two electron head neighbors becomes a electron head
+                        newCells[x, y] = 2;
                     }
                     else
                     {
