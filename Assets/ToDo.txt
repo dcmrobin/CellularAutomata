@@ -1,3 +1,2 @@
-Add wireworld automata
 Add langton's loop automata
 is there a way to optimize some stuff
