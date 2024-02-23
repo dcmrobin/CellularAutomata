@@ -26,6 +26,9 @@ public class Wireworld : MonoBehaviour
     GameObject plane;
     RaycastHit hit;
 
+    private Vector2Int initialMousePosition;
+    private bool drawingLine = false;
+
     public void Start() {
         if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
         {
@@ -166,13 +169,83 @@ public class Wireworld : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
             paused = !paused;
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            SetCell(cellDrawTypeDropdown.value + 1);
+            StartDrawingLine();
         }
-        else if (Input.GetMouseButton(1))
+        else if (Input.GetMouseButtonUp(0))
+        {
+            EndDrawingLine();
+        }
+
+        if (Input.GetMouseButton(1))
         {
             SetCell(0);
+        }
+
+        if (drawingLine && Input.GetMouseButton(0))
+        {
+            DrawLineToCurrentMousePosition();
+        }
+    }
+
+    private void StartDrawingLine()
+    {
+        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+        {
+            initialMousePosition = GetCellPositionFromMousePosition();
+            drawingLine = true;
+        }
+    }
+
+    private void EndDrawingLine()
+    {
+        drawingLine = false;
+    }
+
+    private void DrawLineToCurrentMousePosition()
+    {
+        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+        {
+            Vector2Int currentMousePosition = GetCellPositionFromMousePosition();
+            DrawLine(initialMousePosition, currentMousePosition);
+            initialMousePosition = currentMousePosition;
+        }
+    }
+
+    private Vector2Int GetCellPositionFromMousePosition()
+    {
+        Vector2 pixelUV = hit.textureCoord;
+        pixelUV.x *= texture.width;
+        pixelUV.y *= texture.height;
+        return new Vector2Int((int)pixelUV.x, (int)pixelUV.y);
+    }
+
+    private void DrawLine(Vector2Int start, Vector2Int end)
+    {
+        int dx = Mathf.Abs(end.x - start.x);
+        int dy = Mathf.Abs(end.y - start.y);
+        int sx = start.x < end.x ? 1 : -1;
+        int sy = start.y < end.y ? 1 : -1;
+        int err = dx - dy;
+
+        while (true)
+        {
+            cells[start.x, start.y] = cellDrawTypeDropdown.value + 1; // Set the cell value based on the dropdown selection
+            Render();
+            if (start.x == end.x && start.y == end.y)
+                break;
+            int e2 = 2 * err;
+            if (e2 > -dy)
+            {
+                err -= dy;
+                start.x += sx;
+            }
+            if (e2 < dx)
+            {
+                err += dx;
+                start.y += sy;
+            }
         }
     }
 
