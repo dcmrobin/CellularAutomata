@@ -180,9 +180,20 @@ public class MultiStateAutomataUI : MonoBehaviour
 
     public void LoadRules()
     {
-        if (File.Exists(SaveLoadInputfield.text + ".json"))
+        manager.customRules.Clear();
+        for (int i = 0; i < transform.Find("Viewport").Find("Content").childCount; i++)
         {
-            string json = File.ReadAllText(SaveLoadInputfield.text + ".json");
+            Destroy(transform.Find("Viewport").Find("Content").GetChild(i).gameObject);
+        }
+
+        var dirPath = Application.dataPath + "/../SavedRules/";
+        if(!Directory.Exists(dirPath)) {
+            Debug.Log("no dir exists");
+            return;
+        }
+        if (File.Exists(dirPath + SaveLoadInputfield.text + ".json"))
+        {
+            string json = File.ReadAllText(dirPath + SaveLoadInputfield.text + ".json");
             CustomRuleList ruleList = JsonUtility.FromJson<CustomRuleList>(json);
 
             for (int i = 0; i < ruleList.rules.Count; i++)
