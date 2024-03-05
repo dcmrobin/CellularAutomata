@@ -10,7 +10,15 @@ using Unity.VisualScripting;
 
 public class LifeManager : MonoBehaviour
 {
+    public struct PredefinedShape
+    {
+        public string name;
+        public int[,] shape;
+    }
+
     int[,] cells;
+
+    public List<PredefinedShape> predefinedShapes = new List<PredefinedShape>();
 
     [Header("UI")]
     public Slider densitySlider;
@@ -19,6 +27,7 @@ public class LifeManager : MonoBehaviour
     public Toggle mazeToggle;
     public Toggle highlifeToggle;
     public Toggle chaosToggle;
+    public TMP_Dropdown predefinedShapesDropdown;
 
     [Header("Controls")]
     [Range(0, 1)]
@@ -33,12 +42,13 @@ public class LifeManager : MonoBehaviour
     RaycastHit hit;
 
     private int[,] predefinedShape = new int[,] {
-        { 0, 1, 0 },
-        { 1, 1, 1 },
-        { 0, 1, 0 }
+        { 0, 1, 1 },
+        { 1, 0, 1 },
+        { 0, 0, 1 }
     };
 
     public void Start() {
+        CreateShape("Glider", predefinedShape);
         if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
         {
             width = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
@@ -62,6 +72,25 @@ public class LifeManager : MonoBehaviour
         plane.GetComponent<MeshRenderer>().material.SetFloat("_Glossiness", 0);
 
         GenerateRandomCells();
+    }
+
+    public void CreateShape(string newShapeName, int[,] Nshape)
+    {
+        PredefinedShape newShape = new PredefinedShape{
+            name = newShapeName,
+            shape = Nshape
+        };
+
+        predefinedShapes.Add(newShape);
+
+        // Update the dropdown options
+        List<string> dropdownOptions = new List<string>();
+        foreach (var shape in predefinedShapes)
+        {
+            dropdownOptions.Add(shape.name);
+        }
+        predefinedShapesDropdown.ClearOptions();
+        predefinedShapesDropdown.AddOptions(dropdownOptions);
     }
 
     public void GenerateRandomCells()
@@ -378,11 +407,11 @@ public class LifeManager : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(2)) // Middle mouse button
         {
-            PlacePredefinedShape(predefinedShape);
+            PlacePredefinedShape(predefinedShapes[predefinedShapesDropdown.value]);
         }
     }
 
-    public void PlacePredefinedShape(int[,] shape)
+    public void PlacePredefinedShape(PredefinedShape shapeToPlace)
     {
         if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
         {
@@ -391,21 +420,21 @@ public class LifeManager : MonoBehaviour
             pixelUV.y *= texture.height;
 
             // Calculate the starting position to place the shape
-            int startX = (int)pixelUV.x - shape.GetLength(0) / 2;
-            int startY = (int)pixelUV.y - shape.GetLength(1) / 2;
+            int startX = (int)pixelUV.x - shapeToPlace.shape.GetLength(0) / 2;
+            int startY = (int)pixelUV.y - shapeToPlace.shape.GetLength(1) / 2;
 
             // Ensure the shape does not exceed the boundaries of the board
-            startX = Mathf.Clamp(startX, 0, width - shape.GetLength(0));
-            startY = Mathf.Clamp(startY, 0, height - shape.GetLength(1));
+            startX = Mathf.Clamp(startX, 0, width - shapeToPlace.shape.GetLength(0));
+            startY = Mathf.Clamp(startY, 0, height - shapeToPlace.shape.GetLength(1));
 
             // Place the predefined shape onto the board
-            for (int x = 0; x < shape.GetLength(0); x++)
+            for (int x = 0; x < shapeToPlace.shape.GetLength(0); x++)
             {
-                for (int y = 0; y < shape.GetLength(1); y++)
+                for (int y = 0; y < shapeToPlace.shape.GetLength(1); y++)
                 {
                     int cellX = startX + x;
                     int cellY = startY + y;
-                    if (shape[x, y] == 1 && cellX >= 0 && cellX < width && cellY >= 0 && cellY < height)
+                    if (shapeToPlace.shape[x, y] == 1 && cellX >= 0 && cellX < width && cellY >= 0 && cellY < height)
                     {
                         cells[cellX, cellY] = 1;
                     }
