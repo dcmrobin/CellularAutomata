@@ -32,6 +32,12 @@ public class LifeManager : MonoBehaviour
     GameObject plane;
     RaycastHit hit;
 
+    private int[,] predefinedShape = new int[,] {
+        { 0, 1, 0 },
+        { 1, 1, 1 },
+        { 0, 1, 0 }
+    };
+
     public void Start() {
         if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
         {
@@ -369,6 +375,44 @@ public class LifeManager : MonoBehaviour
         else if (Input.GetMouseButton(1))
         {
             SetCell(0);
+        }
+        else if (Input.GetMouseButtonDown(2)) // Middle mouse button
+        {
+            PlacePredefinedShape(predefinedShape);
+        }
+    }
+
+    public void PlacePredefinedShape(int[,] shape)
+    {
+        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+        {
+            Vector2 pixelUV = hit.textureCoord;
+            pixelUV.x *= texture.width;
+            pixelUV.y *= texture.height;
+
+            // Calculate the starting position to place the shape
+            int startX = (int)pixelUV.x - shape.GetLength(0) / 2;
+            int startY = (int)pixelUV.y - shape.GetLength(1) / 2;
+
+            // Ensure the shape does not exceed the boundaries of the board
+            startX = Mathf.Clamp(startX, 0, width - shape.GetLength(0));
+            startY = Mathf.Clamp(startY, 0, height - shape.GetLength(1));
+
+            // Place the predefined shape onto the board
+            for (int x = 0; x < shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < shape.GetLength(1); y++)
+                {
+                    int cellX = startX + x;
+                    int cellY = startY + y;
+                    if (shape[x, y] == 1 && cellX >= 0 && cellX < width && cellY >= 0 && cellY < height)
+                    {
+                        cells[cellX, cellY] = 1;
+                    }
+                }
+            }
+
+            Render();
         }
     }
 
