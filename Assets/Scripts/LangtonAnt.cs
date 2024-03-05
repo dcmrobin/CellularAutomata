@@ -164,11 +164,29 @@ public class LangtonAnt : MonoBehaviour
                 {
                     colors[x + y * width] = Color.white;
                 }
+                else if (cells[x, y] == 7)
+                {
+                    colors[x + y * width] = Color.blue;
+                }
             }
         }
 
         texture.SetPixels(colors);
         texture.Apply();
+    }
+
+    public void ChangeBlueCells()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (cells[x, y] == 7)
+                {
+                    cells[x, y] = 1;
+                }
+            }
+        }
     }
 
     public void Update()
@@ -198,7 +216,15 @@ public class LangtonAnt : MonoBehaviour
             int currentCellValue = cells[ant.x, ant.y];
             if (currentCellValue == 0) // If the cell is black
             {
-                cells[ant.x, ant.y] = 1; // Change the color to white
+                if (!lifeToggle.isOn)
+                {
+                    cells[ant.x, ant.y] = 1; // Change the color to white
+                }
+                else
+                {
+                    cells[ant.x, ant.y] = 7;
+                }
+
                 if (loopsToggle.isOn)
                 {
                     ant.direction = (ant.direction + 1) % 8; // Turn 45 degrees clockwise
@@ -320,7 +346,7 @@ public class LangtonAnt : MonoBehaviour
                         newCells[x, y] = 1;
                     }
                 }
-                else // If the cell is dead
+                else if (cells[x, y] == 0) // If the cell is dead
                 {
                     if (aliveNeighbours == 3)
                     {
@@ -332,6 +358,10 @@ public class LangtonAnt : MonoBehaviour
                         // Dead cells remain dead
                         newCells[x, y] = 0;
                     }
+                }
+                else if (cells[x, y] == 7)
+                {
+                    newCells[x, y] = 7;
                 }
             }
         }
@@ -352,7 +382,10 @@ public class LangtonAnt : MonoBehaviour
             {
                 int neighbourX = (gridX + offsetX + width) % width;
                 int neighbourY = (gridY + offsetY + height) % height;
-                aliveCellCount += cells[neighbourX, neighbourY];
+                if (cells[neighbourX, neighbourY] != 7)
+                {
+                    aliveCellCount += cells[neighbourX, neighbourY];
+                }
             }
         }
         // Subtract the central cell's value because it was added in the loop
