@@ -2382,8 +2382,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1159808051}
         m_TargetAssemblyTypeName: Loader, Assembly-CSharp
-        m_MethodName: LoadMenu
-        m_Mode: 1
+        m_MethodName: LoadScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7716,6 +7716,7 @@ MonoBehaviour:
   customAutomataSceneIndex: 2
   multicolorAutomataSceneIndex: 3
   langtonAntSceneIndex: 4
+  wireworldSceneIndex: 5
   sizeInputfield: {fileID: 0}
 --- !u!114 &1159808052
 MonoBehaviour:
