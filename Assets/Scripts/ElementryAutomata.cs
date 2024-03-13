@@ -25,6 +25,8 @@ public class ElementryAutomata : MonoBehaviour
     GameObject plane;
     [HideInInspector] public RaycastHit hit;
 
+    private int currentY;
+
     public void Start() {
         if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
         {
@@ -82,7 +84,8 @@ public class ElementryAutomata : MonoBehaviour
             delay -= .1f;
             if (delay <= 0)
             {
-                UpdateCells();
+                currentY += 1;
+                UpdateCells(currentY);
                 delay = delaySlider.value;
             }
         }
@@ -90,46 +93,14 @@ public class ElementryAutomata : MonoBehaviour
         HandleControls();
     }
 
-    public void UpdateCells()
+    public void UpdateCells(int yValue)
     {
         int[,] newCells = new int[width, height];
 
-        // Iterate over all cells
+        // Iterate over all cells at current y-value
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
-            {
-                // Get the number of alive neighbors for the current cell
-                int aliveNeighbours = GetSurroundingAliveCellCount(x, y);
-
-                // Apply Conway's rules
-                if (cells[x, y] == 1) // If the cell is alive
-                {
-                    if (aliveNeighbours < 2 || aliveNeighbours > 3)
-                    {
-                        // Any live cell with fewer than two live neighbors dies, or with more than three live neighbors dies
-                        newCells[x, y] = 0;
-                    }
-                    else
-                    {
-                        // Any live cell with two or three live neighbors lives on to the next generation
-                        newCells[x, y] = 1;
-                    }
-                }
-                else // If the cell is dead
-                {
-                    if (aliveNeighbours == 3)
-                    {
-                        // Any dead cell with exactly three live neighbors becomes a live cell
-                        newCells[x, y] = 1;
-                    }
-                    else
-                    {
-                        // Dead cells remain dead
-                        newCells[x, y] = 0;
-                    }
-                }
-            }
+            //how would I implement the rules for rule 90 cellular automata
         }
 
         // Update the cells array with the new state
@@ -137,23 +108,6 @@ public class ElementryAutomata : MonoBehaviour
 
         // Render the updated grid
         Render();
-    }
-
-    int GetSurroundingAliveCellCount(int gridX, int gridY)
-    {
-        int aliveCellCount = 0;
-        for (int offsetX = -1; offsetX <= 1; offsetX++)
-        {
-            for (int offsetY = -1; offsetY <= 1; offsetY++)
-            {
-                int neighbourX = (gridX + offsetX + width) % width;
-                int neighbourY = (gridY + offsetY + height) % height;
-                aliveCellCount += cells[neighbourX, neighbourY];
-            }
-        }
-        // Subtract the central cell's value because it was added in the loop
-        aliveCellCount -= cells[gridX, gridY];
-        return aliveCellCount;
     }
 
     public void HandleControls()
