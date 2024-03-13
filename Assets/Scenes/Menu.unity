@@ -372,12 +372,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe34eda39ab631642bd8a81adb6779e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuSceneIndex: 0
-  lifeSceneIndex: 1
-  customAutomataSceneIndex: 2
-  multicolorAutomataSceneIndex: 3
-  langtonAntSceneIndex: 4
-  wireworldSceneIndex: 5
   sizeInputfield: {fileID: 1045553421}
 --- !u!1 &116577334
 GameObject:
@@ -2738,7 +2732,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -10.000004}
+  m_AnchoredPosition: {x: -0.000030366, y: -40}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2007380501

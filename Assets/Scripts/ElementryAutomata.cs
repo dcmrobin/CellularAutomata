@@ -25,8 +25,6 @@ public class ElementryAutomata : MonoBehaviour
     GameObject plane;
     [HideInInspector] public RaycastHit hit;
 
-    private int currentY;
-
     public void Start() {
         if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
         {
@@ -84,8 +82,7 @@ public class ElementryAutomata : MonoBehaviour
             delay -= .1f;
             if (delay <= 0)
             {
-                currentY += 1;
-                UpdateCells(currentY);
+                UpdateCells();
                 delay = delaySlider.value;
             }
         }
@@ -93,17 +90,32 @@ public class ElementryAutomata : MonoBehaviour
         HandleControls();
     }
 
-    public void UpdateCells(int yValue)
+    public void UpdateCells()
     {
+        // Temporary array to hold the updated cell values
         int[,] newCells = new int[width, height];
 
-        // Iterate over all cells at current y-value
+        // Apply Rule 90 to each cell
         for (int x = 0; x < width; x++)
         {
-            //how would I implement the rules for rule 90 cellular automata
+            for (int y = 0; y < height; y++)
+            {
+                int left = (x == 0) ? 0 : cells[x - 1, y]; // Value of left neighbor
+                int right = (x == width - 1) ? 0 : cells[x + 1, y]; // Value of right neighbor
+
+                // Apply Rule 90
+                if ((left == 1 && right == 0) || (left == 0 && right == 1))
+                {
+                    newCells[x, y] = 1;
+                }
+                else
+                {
+                    newCells[x, y] = 0;
+                }
+            }
         }
 
-        // Update the cells array with the new state
+        // Update the main cells array with the new cell values
         cells = newCells;
 
         // Render the updated grid
