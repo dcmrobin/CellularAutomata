@@ -1,17 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using System;
 using TMPro;
-using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-public class ElementryAutomata : MonoBehaviour
+public class ElementaryAutomata : MonoBehaviour
 {
     [HideInInspector] public int[,] cells;
-
+    
     [Header("UI")]
     public Slider delaySlider;
     public TMP_InputField ruleInputField;
@@ -21,46 +17,46 @@ public class ElementryAutomata : MonoBehaviour
     public int width = 50;
     public int height = 50;
     public bool paused;
-    public float updateDelay = 3;
+    public float updateDelay = 3f;
     float delay;
     [HideInInspector] public Texture2D texture;
     GameObject plane;
     [HideInInspector] public RaycastHit hit;
 
-    public void Start() {
-        if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
-        {
-            width = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
-            height = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
-        }
-        else
-        {
-            width = 100;
-            height = 100;
-        }
+    private int[] ruleBinary = new int[8];
+
+    public void Start()
+    {
+        width = Int32.TryParse(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text, out int parsedWidth) ? parsedWidth : 100;
+        height = width;
 
         delaySlider.value = delay = updateDelay;
         cells = new int[width, height];
-        texture = new(width, height);
+        texture = new Texture2D(width, height);
         texture.filterMode = FilterMode.Point;
 
         plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.Rotate(-90, 0, 0);
-        plane.GetComponent<MeshRenderer>().material.mainTexture = texture;
-        plane.GetComponent<MeshRenderer>().material.SetFloat("_Glossiness", 0);
+        var meshRenderer = plane.GetComponent<MeshRenderer>();
+        meshRenderer.material.mainTexture = texture;
+        meshRenderer.material.SetFloat("_Glossiness", 0f);
 
-        cells[width/2, 0] = 1;
+        cells[width / 2, 0] = 1;
+        ComputeRuleBinary();
+    }
+
+    private void ComputeRuleBinary()
+    {
+        string binaryString = Convert.ToString(ruleNumber, 2).PadLeft(8, '0');
+        for (int i = 0; i < 8; i++)
+        {
+            ruleBinary[i] = binaryString[i] - '0';
+        }
     }
 
     public void Clear()
     {
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                cells[x, y] = 0;
-            }
-        }
+        Array.Clear(cells, 0, cells.Length);
         Render();
     }
 
@@ -78,13 +74,14 @@ public class ElementryAutomata : MonoBehaviour
         texture.Apply();
     }
 
-    public void Update() {
+    public void Update()
+    {
         if (!paused)
         {
-            delay -= .1f;
+            delay -= Time.deltaTime;
             if (delay <= 0)
             {
-                UpdateCells(ruleNumber);
+                UpdateCells();
                 delay = delaySlider.value;
             }
         }
@@ -92,69 +89,55 @@ public class ElementryAutomata : MonoBehaviour
         HandleControls();
     }
 
-    public void UpdateCells(int ruleNumber)
+    public void UpdateCells()
     {
-        // Temporary array to hold the updated cell values
         int[,] newCells = new int[width, height];
-
-        // Apply the specified rule to each cell
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                int left = (x == 0) ? cells[width - 1, y] : cells[x - 1, y]; // Value of left neighbor
-                int right = (x == width - 1) ? cells[0, y] : cells[x + 1, y]; // Value of right neighbor
-
-                // Apply the specified rule (Rule 90, Rule 110, etc.)
-                int newState = ApplyRule(ruleNumber, left, cells[x, y], right);
-
-                int newY = (y + 1) % height; // Calculate the new y-value
-                newCells[x, newY] = newState; // Set the new cell value
+                int left = (x == 0) ? cells[width - 1, y] : cells[x - 1, y];
+                int right = (x == width - 1) ? cells[0, y] : cells[x + 1, y];
+                int newState = ApplyRule(left, cells[x, y], right);
+                int newY = (y + 1) % height;
+                newCells[x, newY] = newState;
             }
         }
-
-        // Update the main cells array with the new cell values
         cells = newCells;
-
-        // Render the updated grid
         Render();
     }
 
-    private int ApplyRule(int ruleNumber, int left, int center, int right)
+    private int ApplyRule(int left, int center, int right)
     {
-        // Convert the rule number to a binary representation
-        string ruleBinary = Convert.ToString(ruleNumber, 2).PadLeft(8, '0');
-
-        // Construct the rule pattern
         string pattern = $"{left}{center}{right}";
-
-        // Find the index of the rule pattern in the binary representation of the rule number
         int index = 7 - Convert.ToInt32(pattern, 2);
-
-        // Get the new state from the rule binary representation
-        return Convert.ToInt32(ruleBinary[index].ToString());
+        return ruleBinary[index];
     }
 
     public void HandleControls()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
             paused = !paused;
 
-        if (Input.GetMouseButton(0))
+        if (Mouse.current.leftButton.isPressed)
         {
             SetCell(1);
         }
-        else if (Input.GetMouseButton(1))
+        else if (Mouse.current.rightButton.isPressed)
         {
             SetCell(0);
         }
+    }
 
+    public void UpdateRule()
+    {
         ruleNumber = Convert.ToInt32(ruleInputField.text);
+        ComputeRuleBinary();
     }
 
     public void SetCell(int cellValue)
     {
-        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Camera.main.transform.forward, out hit, Mathf.Infinity))
         {
             Vector2 pixelUV = hit.textureCoord;
             pixelUV.x *= texture.width;
