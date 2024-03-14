@@ -14,6 +14,7 @@ public class ElementryAutomata : MonoBehaviour
 
     [Header("UI")]
     public Slider delaySlider;
+    public TMP_InputField ruleInputField;
 
     [Header("Controls")]
     public int ruleNumber = 90;
@@ -147,6 +148,8 @@ public class ElementryAutomata : MonoBehaviour
         {
             SetCell(0);
         }
+
+        ruleNumber = Convert.ToInt32(ruleInputField.text);
     }
 
     public void SetCell(int cellValue)
