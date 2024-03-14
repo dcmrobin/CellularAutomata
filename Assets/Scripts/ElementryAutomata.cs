@@ -106,11 +106,11 @@ public class ElementryAutomata : MonoBehaviour
                 // Apply Rule 90
                 if ((left == 1 && right == 0) || (left == 0 && right == 1))
                 {
-                    newCells[x, y] = 1;
+                    newCells[x, (y + 1) % height] = 1; // Move the cell down one y-value
                 }
                 else
                 {
-                    newCells[x, y] = 0;
+                    newCells[x, (y + 1) % height] = 0; // Move the cell down one y-value
                 }
             }
         }
