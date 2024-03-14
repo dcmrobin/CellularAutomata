@@ -60,7 +60,7 @@ public class Huegene : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                cells[x, y] = (UnityEngine.Random.value < densitySlider.value)?1:0;// how will I select a random hue here?
+                cells[x, y] = (UnityEngine.Random.value < densitySlider.value)?1:0;
             }
         }
         Render();
@@ -88,7 +88,7 @@ public class Huegene : MonoBehaviour
                 colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
             }
         }
-        texture.SetPixels(colors);// in this method, rid after the hue shift, it's making it right back to white since the value of the cell is one... effectively making there be no hue shift. this is a problem.
+        texture.SetPixels(colors);
         texture.Apply();
     }
 
@@ -108,7 +108,7 @@ public class Huegene : MonoBehaviour
 
     public void UpdateCells()
     {
-        // how will I make an alive cell choose a random amount of its dead neighbors and then make the random amount of dead neighbors alive, shifting their hues in the process? also, after updating the cells, don't wipe the board, keep the ones that have just spawned alive please.
+        // 
 
         // Render the updated grid
         Render();
