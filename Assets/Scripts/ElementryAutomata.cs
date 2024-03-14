@@ -94,6 +94,8 @@ public class ElementryAutomata : MonoBehaviour
     {
         // Temporary array to hold the updated cell values
         int[,] newCells = new int[width, height];
+        // Array to track whether a cell has been updated or not
+        bool[,] updated = new bool[width, height];
 
         // Apply Rule 90 to each cell
         for (int x = 0; x < width; x++)
@@ -106,11 +108,21 @@ public class ElementryAutomata : MonoBehaviour
                 // Apply Rule 90
                 if ((left == 1 && right == 0) || (left == 0 && right == 1))
                 {
-                    newCells[x, (y + 1) % height] = 1; // Move the cell down one y-value
+                    int newY = (y + 1) % height; // Calculate the new y-value
+                    newCells[x, newY] = 1; // Set the new cell value
+                    updated[x, newY] = true; // Mark the cell as updated
                 }
-                else
+            }
+        }
+
+        // Copy the remaining unchanged cells to the newCells array
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (!updated[x, y])
                 {
-                    newCells[x, (y + 1) % height] = 0; // Move the cell down one y-value
+                    newCells[x, y] = cells[x, y];
                 }
             }
         }
