@@ -90,22 +90,26 @@ public class ElementaryAutomata : MonoBehaviour
     }
 
     public void UpdateCells()
+{
+    int[,] newCells = new int[width, height];
+    for (int x = 0; x < width; x++)
     {
-        int[,] newCells = new int[width, height];
-        for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y++)
         {
-            for (int y = 0; y < height; y++)
-            {
-                int left = (x == 0) ? cells[width - 1, y] : cells[x - 1, y];
-                int right = (x == width - 1) ? cells[0, y] : cells[x + 1, y];
-                int newState = ApplyRule(left, cells[x, y], right);
-                int newY = (y + 1) % height;
-                newCells[x, newY] = newState;
-            }
+            int left = (x == 0) ? cells[width - 1, y] : cells[x - 1, y];
+            int right = (x == width - 1) ? cells[0, y] : cells[x + 1, y];
+            int newState = ApplyRule(left, cells[x, y], right);
+            int newY = (y + 1) % height;
+            newCells[x, newY] = newState;
+
+            // Preserve existing cell state if it's not being updated
+            if (newState == 0 && cells[x, y] == 1)
+                newCells[x, y] = 1;
         }
-        cells = newCells;
-        Render();
     }
+    cells = newCells; // Update entire grid with the new generation
+    Render();
+}
 
     private int ApplyRule(int left, int center, int right)
     {
