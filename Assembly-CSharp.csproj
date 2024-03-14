@@ -44,6 +44,7 @@
      <Compile Include="Assets\Scripts\MultiStateAutomataUI.cs" />
      <Compile Include="Assets\Scripts\CustomAutomataManager.cs" />
      <Compile Include="Assets\Scripts\Wireworld.cs" />
+     <Compile Include="Assets\Scripts\Huegene.cs" />
      <Compile Include="Assets\Scripts\ElementryAutomata.cs" />
      <Compile Include="Assets\Scripts\Loader.cs" />
      <Compile Include="Assets\Scripts\LifeManager.cs" />
