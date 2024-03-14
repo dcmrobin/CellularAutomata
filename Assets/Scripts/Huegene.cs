@@ -108,10 +108,62 @@ public class Huegene : MonoBehaviour
 
     public void UpdateCells()
     {
-        // 
+        // Create a copy of the current cells to preserve the past generation
+        int[,] newCells = (int[,])cells.Clone();
+
+        // Iterate through each cell in the grid
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                // If the cell is alive
+                if (cells[x, y] == 1)
+                {
+                    // Find a random dead neighbor
+                    List<Vector2Int> deadNeighbors = GetDeadNeighbors(x, y);
+                    if (deadNeighbors.Count > 0)
+                    {
+                        int randomIndex = UnityEngine.Random.Range(0, deadNeighbors.Count);
+                        Vector2Int randomNeighbor = deadNeighbors[randomIndex];
+                        // Change the dead neighbor to alive in the new cells array
+                        newCells[randomNeighbor.x, randomNeighbor.y] = 1;
+                    }
+                }
+            }
+        }
+
+        // Update the cells array with the new cells
+        cells = newCells;
 
         // Render the updated grid
         Render();
+    }
+
+    // Helper method to get the dead neighbors of a cell
+    public List<Vector2Int> GetDeadNeighbors(int x, int y)
+    {
+        List<Vector2Int> deadNeighbors = new List<Vector2Int>();
+
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                int neighborX = x + i;
+                int neighborY = y + j;
+
+                // Ensure the neighbor is within the grid boundaries and not the center cell
+                if (neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height &&
+                    !(i == 0 && j == 0))
+                {
+                    if (cells[neighborX, neighborY] == 0)
+                    {
+                        deadNeighbors.Add(new Vector2Int(neighborX, neighborY));
+                    }
+                }
+            }
+        }
+
+        return deadNeighbors;
     }
 
     public void HandleControls()
