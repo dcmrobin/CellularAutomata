@@ -95,8 +95,6 @@ public class ElementryAutomata : MonoBehaviour
     {
         // Temporary array to hold the updated cell values
         int[,] newCells = new int[width, height];
-        // Array to track whether a cell has been updated or not
-        bool[,] updated = new bool[width, height];
 
         // Apply the specified rule to each cell
         for (int x = 0; x < width; x++)
@@ -111,19 +109,6 @@ public class ElementryAutomata : MonoBehaviour
 
                 int newY = (y + 1) % height; // Calculate the new y-value
                 newCells[x, newY] = newState; // Set the new cell value
-                updated[x, newY] = true; // Mark the cell as updated
-            }
-        }
-
-        // Copy the remaining unchanged cells to the newCells array
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                if (!updated[x, y])
-                {
-                    newCells[x, y] = cells[x, y];
-                }
             }
         }
 
