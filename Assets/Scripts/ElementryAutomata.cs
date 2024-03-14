@@ -16,6 +16,7 @@ public class ElementryAutomata : MonoBehaviour
     public Slider delaySlider;
 
     [Header("Controls")]
+    public int ruleNumber = 90;
     public int width = 50;
     public int height = 50;
     public bool paused;
@@ -82,7 +83,7 @@ public class ElementryAutomata : MonoBehaviour
             delay -= .1f;
             if (delay <= 0)
             {
-                UpdateCells();
+                UpdateCells(ruleNumber);
                 delay = delaySlider.value;
             }
         }
@@ -90,28 +91,27 @@ public class ElementryAutomata : MonoBehaviour
         HandleControls();
     }
 
-    public void UpdateCells()
+    public void UpdateCells(int ruleNumber)
     {
         // Temporary array to hold the updated cell values
         int[,] newCells = new int[width, height];
         // Array to track whether a cell has been updated or not
         bool[,] updated = new bool[width, height];
 
-        // Apply Rule 90 to each cell
+        // Apply the specified rule to each cell
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                int left = (x == 0) ? 0 : cells[x - 1, y]; // Value of left neighbor
-                int right = (x == width - 1) ? 0 : cells[x + 1, y]; // Value of right neighbor
+                int left = (x == 0) ? cells[width - 1, y] : cells[x - 1, y]; // Value of left neighbor
+                int right = (x == width - 1) ? cells[0, y] : cells[x + 1, y]; // Value of right neighbor
 
-                // Apply Rule 90
-                if ((left == 1 && right == 0) || (left == 0 && right == 1))
-                {
-                    int newY = (y + 1) % height; // Calculate the new y-value
-                    newCells[x, newY] = 1; // Set the new cell value
-                    updated[x, newY] = true; // Mark the cell as updated
-                }
+                // Apply the specified rule (Rule 90, Rule 110, etc.)
+                int newState = ApplyRule(ruleNumber, left, cells[x, y], right);
+
+                int newY = (y + 1) % height; // Calculate the new y-value
+                newCells[x, newY] = newState; // Set the new cell value
+                updated[x, newY] = true; // Mark the cell as updated
             }
         }
 
@@ -132,6 +132,21 @@ public class ElementryAutomata : MonoBehaviour
 
         // Render the updated grid
         Render();
+    }
+
+    private int ApplyRule(int ruleNumber, int left, int center, int right)
+    {
+        // Convert the rule number to a binary representation
+        string ruleBinary = Convert.ToString(ruleNumber, 2).PadLeft(8, '0');
+
+        // Construct the rule pattern
+        string pattern = $"{left}{center}{right}";
+
+        // Find the index of the rule pattern in the binary representation of the rule number
+        int index = 7 - Convert.ToInt32(pattern, 2);
+
+        // Get the new state from the rule binary representation
+        return Convert.ToInt32(ruleBinary[index].ToString());
     }
 
     public void HandleControls()
