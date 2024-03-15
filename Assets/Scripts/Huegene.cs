@@ -191,6 +191,7 @@ public class Huegene : MonoBehaviour
             pixelUV.x *= texture.width;
             pixelUV.y *= texture.height;
             cells[(int)pixelUV.x, (int)pixelUV.y] = cellValue;
+            texture.SetPixel((int)pixelUV.x, (int)pixelUV.y, UnityEngine.Random.ColorHSV());
             Render();
         }
     }
