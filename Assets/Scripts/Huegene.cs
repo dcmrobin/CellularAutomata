@@ -128,7 +128,13 @@ public class Huegene : MonoBehaviour
                         Vector2Int randomNeighbor = deadNeighbors[randomIndex];
                         // Change the dead neighbor to alive in the new cells array
                         newCells[randomNeighbor.x, randomNeighbor.y] = 1;
-                        texture.SetPixel(randomNeighbor.x, randomNeighbor.y, texture.GetPixel(x, y));
+                        
+                        // Mutate the hue slightly of the new cell
+                        Color currentColor = texture.GetPixel(x, y);
+                        float hue = currentColor.r;
+                        hue = (hue + UnityEngine.Random.Range(-0.1f, 0.1f)) % 1.0f;
+                        Color newColor = Color.HSVToRGB(hue, currentColor.g, currentColor.b);
+                        texture.SetPixel(randomNeighbor.x, randomNeighbor.y, newColor);
                     }
                 }
             }
