@@ -1,3 +1,2 @@
 Add multi-neighborhood cellular automata (MNCA)
-Add huegene cellular automata
 is there a way to optimize some stuff
