@@ -145,10 +145,14 @@ public class Huegene : MonoBehaviour
                             switch (hueshadeDropdown.value)
                             {
                                 case 0:
-                                    currentH = (currentH + hueShift) % 1.0f; // Ensure hue stays within 0-1 range
+                                    currentH = Mathf.Clamp01(currentH + hueShift); // Ensure hue stays within 0-1 range
                                     break;
                                 case 1:
                                     currentL = Mathf.Clamp01(currentL + hueShift); // Ensure shade stays within 0-1 range
+                                    break;
+                                case 2:
+                                    currentH = Mathf.Clamp01(currentH + hueShift);
+                                    currentL = Mathf.Clamp01(currentL + hueShift);
                                     break;
                             }
 
