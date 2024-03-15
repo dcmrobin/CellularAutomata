@@ -133,11 +133,18 @@ public class Huegene : MonoBehaviour
                         // Mutate the hue slightly of the new cell
                         if (!mosaicToggle.isOn)
                         {
-                            Color currentColor = texture.GetPixel(x, y);
-                            float hue = currentColor.r;
-                            hue = (hue + UnityEngine.Random.Range(-0.1f, 0.1f)) % 1.0f;
-                            Color newColor = Color.HSVToRGB(hue, currentColor.g, currentColor.b);
-                            texture.SetPixel(randomNeighbor.x, randomNeighbor.y, newColor);
+                            // Get the color of the current cell
+                            Color currentCellColor = texture.GetPixel(x, y);
+                            
+                            // Calculate a slight shift in hue
+                            float hueShift = UnityEngine.Random.Range(-0.1f, 0.1f); // Adjust the range as needed
+                            float currentH, currentS, currentL;
+                            Color.RGBToHSV(currentCellColor, out currentH, out currentS, out currentL);
+                            currentH = (currentH + hueShift) % 1.0f; // Ensure hue stays within 0-1 range
+                            
+                            // Set the hue-shifted color to the new cell
+                            Color newCellColor = Color.HSVToRGB(currentH, currentS, currentL);
+                            texture.SetPixel(randomNeighbor.x, randomNeighbor.y, newCellColor);
                         }
                         else
                         {
@@ -150,6 +157,9 @@ public class Huegene : MonoBehaviour
 
         // Update the cells array with the new cells
         cells = newCells;
+
+        // Apply changes to the texture
+        texture.Apply();
 
         // Render the updated grid
         Render();
