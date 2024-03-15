@@ -19,7 +19,7 @@ public class Huegene : MonoBehaviour
     public TMP_Dropdown hueshadeDropdown;
 
     [Header("Controls")]
-    [Range(0, 1)]
+    [Range(0, 0.3f)]
     public float density;
     public int width = 50;
     public int height = 50;
