@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using TMPro;
-using Unity.VisualScripting;
+using System.IO;
 
 public class Huegene : MonoBehaviour
 {
@@ -17,6 +17,8 @@ public class Huegene : MonoBehaviour
     public Slider delaySlider;
     public Toggle mosaicToggle;
     public TMP_Dropdown hueshadeDropdown;
+    public Button saveImageButton;
+    public TMP_InputField saveImageInputfield;
 
     [Header("Controls")]
     [Range(0, 0.3f)]
@@ -219,6 +221,15 @@ public class Huegene : MonoBehaviour
         {
             SetCell(0);
         }
+
+        if (saveImageInputfield.text != "")
+        {
+            saveImageButton.interactable = true;
+        }
+        else
+        {
+            saveImageButton.interactable = false;
+        }
     }
 
     public void SetCell(int cellValue)
@@ -232,5 +243,15 @@ public class Huegene : MonoBehaviour
             texture.SetPixel((int)pixelUV.x, (int)pixelUV.y, UnityEngine.Random.ColorHSV());
             Render();
         }
+    }
+
+    public void SaveTextureAsImage()
+    {
+        byte[] bytes = texture.EncodeToPNG();
+        var dirPath = Application.dataPath + "/../SavedImages/";
+        if(!Directory.Exists(dirPath)) {
+            Directory.CreateDirectory(dirPath);
+        }
+        File.WriteAllBytes(dirPath + saveImageInputfield.text + ".png", bytes);
     }
 }
