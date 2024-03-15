@@ -15,6 +15,7 @@ public class Huegene : MonoBehaviour
     [Header("UI")]
     public Slider densitySlider;
     public Slider delaySlider;
+    public Toggle mosaicToggle;
 
     [Header("Controls")]
     [Range(0, 1)]
@@ -130,11 +131,18 @@ public class Huegene : MonoBehaviour
                         newCells[randomNeighbor.x, randomNeighbor.y] = 1;
                         
                         // Mutate the hue slightly of the new cell
-                        Color currentColor = texture.GetPixel(x, y);
-                        float hue = currentColor.r;
-                        hue = (hue + UnityEngine.Random.Range(-0.1f, 0.1f)) % 1.0f;
-                        Color newColor = Color.HSVToRGB(hue, currentColor.g, currentColor.b);
-                        texture.SetPixel(randomNeighbor.x, randomNeighbor.y, newColor);
+                        if (!mosaicToggle.isOn)
+                        {
+                            Color currentColor = texture.GetPixel(x, y);
+                            float hue = currentColor.r;
+                            hue = (hue + UnityEngine.Random.Range(-0.1f, 0.1f)) % 1.0f;
+                            Color newColor = Color.HSVToRGB(hue, currentColor.g, currentColor.b);
+                            texture.SetPixel(randomNeighbor.x, randomNeighbor.y, newColor);
+                        }
+                        else
+                        {
+                            texture.SetPixel(randomNeighbor.x, randomNeighbor.y, texture.GetPixel(x, y));
+                        }
                     }
                 }
             }
