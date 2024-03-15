@@ -61,9 +61,10 @@ public class Huegene : MonoBehaviour
             for (int y = 0; y < height; y++)
             {
                 cells[x, y] = (UnityEngine.Random.value < densitySlider.value)?1:0;
+                texture.SetPixel(x, y, UnityEngine.Random.ColorHSV());
             }
         }
-        Render();
+        //Render();
     }
 
     public void Clear()
@@ -85,7 +86,7 @@ public class Huegene : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
+                colors[x + y * width] = (cells[x, y] == 1) ? ((texture.GetPixel(x, y) == Color.black) ? Color.white : texture.GetPixel(x, y)) : Color.black;
             }
         }
         texture.SetPixels(colors);
@@ -127,6 +128,7 @@ public class Huegene : MonoBehaviour
                         Vector2Int randomNeighbor = deadNeighbors[randomIndex];
                         // Change the dead neighbor to alive in the new cells array
                         newCells[randomNeighbor.x, randomNeighbor.y] = 1;
+                        texture.SetPixel(randomNeighbor.x, randomNeighbor.y, texture.GetPixel(x, y));
                     }
                 }
             }
