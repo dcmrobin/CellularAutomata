@@ -16,8 +16,7 @@ public class Huegene : MonoBehaviour
     public Slider densitySlider;
     public Slider delaySlider;
     public Toggle mosaicToggle;
-    public Toggle shadeToggle;
-    public Toggle hueToggle;
+    public TMP_Dropdown hueshadeDropdown;
 
     [Header("Controls")]
     [Range(0, 1)]
@@ -142,13 +141,15 @@ public class Huegene : MonoBehaviour
                             float hueShift = UnityEngine.Random.Range(-0.1f, 0.1f); // Adjust the range as needed
                             float currentH, currentS, currentL;
                             Color.RGBToHSV(currentCellColor, out currentH, out currentS, out currentL);
-                            if (hueToggle.isOn)
+
+                            switch (hueshadeDropdown.value)
                             {
-                                currentH = (currentH + hueShift) % 1.0f; // Ensure hue stays within 0-1 range
-                            }
-                            else if (shadeToggle.isOn)
-                            {
-                                currentL = Mathf.Clamp01(currentL + hueShift); // Ensure shade stays within 0-1 range
+                                case 0:
+                                    currentH = (currentH + hueShift) % 1.0f; // Ensure hue stays within 0-1 range
+                                    break;
+                                case 1:
+                                    currentL = Mathf.Clamp01(currentL + hueShift); // Ensure shade stays within 0-1 range
+                                    break;
                             }
 
                             // Set the hue-shifted color to the new cell
