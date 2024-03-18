@@ -30,7 +30,7 @@ public class Wireworld : MonoBehaviour
     private bool drawingLine = false;
 
     public void Start() {
-        if (GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
+        if (GameObject.Find("Menu") != null && GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text != "")
         {
             width = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);
             height = Convert.ToInt32(GameObject.Find("Menu").GetComponent<Loader>().sizeInputfield.text);

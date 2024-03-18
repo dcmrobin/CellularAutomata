@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\Wireworld.cs" />
      <Compile Include="Assets\Scripts\Huegene.cs" />
      <Compile Include="Assets\Scripts\Loader.cs" />
+     <Compile Include="Assets\Scripts\MNCA.cs" />
      <Compile Include="Assets\Scripts\LifeManager.cs" />
      <Compile Include="Assets\Scripts\LifeShapesDatabase.cs" />
      <Compile Include="Assets\Scripts\LangtonAnt.cs" />
