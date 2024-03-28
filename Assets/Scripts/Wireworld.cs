@@ -15,6 +15,7 @@ public class Wireworld : MonoBehaviour
     [Header("UI")]
     public Slider delaySlider;
     public TMP_Dropdown cellDrawTypeDropdown;
+    public TMP_Dropdown predefinedShapeDropdown;
 
     [Header("Controls")]
     public int width = 50;
@@ -183,9 +184,126 @@ public class Wireworld : MonoBehaviour
             SetCell(0);
         }
 
+        if (Input.GetMouseButtonDown(2)) // Middle mouse button
+        {
+            int[,] selectedShape = GetSelectedPredefinedShape();
+            PlacePredefinedShape(selectedShape);
+        }
+
         if (drawingLine && Input.GetMouseButton(0))
         {
             DrawLineToCurrentMousePosition();
+        }
+    }
+
+    public void PlacePredefinedShape(int[,] shape)
+    {
+        if (Physics.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Camera.main.transform.forward, out hit, Mathf.Infinity))
+        {
+            Vector2Int cellPosition = GetCellPositionFromMousePosition();
+            int shapeWidth = shape.GetLength(0);
+            int shapeHeight = shape.GetLength(1);
+
+            // Calculate the position to place the shape based on the mouse click
+            int startX = Mathf.Clamp(cellPosition.x - shapeWidth / 2, 0, width - shapeWidth);
+            int startY = Mathf.Clamp(cellPosition.y - shapeHeight / 2, 0, height - shapeHeight);
+
+            // Place the shape onto the grid
+            for (int x = 0; x < shapeWidth; x++)
+            {
+                for (int y = 0; y < shapeHeight; y++)
+                {
+                    int gridX = startX + x;
+                    int gridY = startY + y;
+                    if (gridX >= 0 && gridX < width && gridY >= 0 && gridY < height)
+                    {
+                        cells[gridX, gridY] = shape[x, y];
+                    }
+                }
+            }
+
+            // Render the updated grid
+            Render();
+        }
+    }
+
+    private int[,] GetSelectedPredefinedShape()
+    {
+        int selectedShapeIndex = predefinedShapeDropdown.value;
+        switch (selectedShapeIndex)
+        {
+            case 0: // OR gate
+                return new int[,]
+                {
+                    {1, 1, 0, 0, 0},
+                    {0, 0, 1, 0, 0},
+                    {0, 1, 1, 1, 1},
+                    {0, 0, 1, 0, 0},
+                    {1, 1, 0, 0, 0}
+                };
+            case 1: // XOR gate
+                return new int[,]
+                {
+                    {1, 1, 0, 0, 0, 0, 0},
+                    {0, 0, 1, 0, 0, 0, 0},
+                    {0, 1, 1, 1, 1, 0, 0},
+                    {0, 1, 0, 0, 1, 1, 1},
+                    {0, 1, 1, 1, 1, 0, 0},
+                    {0, 0, 1, 0, 0, 0, 0},
+                    {1, 1, 0, 0, 0, 0, 0}
+                };
+            case 2: // NOT gate
+                return new int[,]
+                {
+                    {0, 0, 1, 1, 0, 0, 0},
+                    {1, 1, 0, 0, 1, 0, 1},
+                    {0, 0, 0, 2, 2, 2, 0},
+                    {0, 0, 3, 0, 3, 3, 0},
+                    {0, 0, 1, 2, 1, 0, 0}
+                };
+            case 3: // AND gate
+                return new int[,]
+                {
+                    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0},
+                    {1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0},
+                    {0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1},
+                    {1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0}
+                };
+            case 4: // Flip-flop
+                return new int[,]
+                {
+                    {1, 1, 1, 1, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 1, 0, 0, 0},
+                    {0, 0, 0, 1, 1, 1, 0, 0},
+                    {0, 0, 0, 0, 1, 0, 0, 0},
+                    {0, 0, 0, 1, 0, 1, 1, 1},
+                    {0, 0, 0, 1, 0, 1, 0, 0},
+                    {0, 0, 1, 1, 1, 0, 0, 0},
+                    {0, 0, 0, 1, 0, 0, 0, 0},
+                    {1, 1, 1, 0, 0, 0, 0, 0}
+                };
+            case 5: // Timer
+                return new int[,]
+                {
+                    {0, 1, 1, 1, 1, 0, 0},
+                    {1, 0, 0, 0, 0, 1, 1},
+                    {0, 1, 1, 1, 1, 0, 0}
+                };
+            case 6: // Diode
+                return new int[,]
+                {
+                    {0, 0, 1, 1, 0, 0},
+                    {1, 1, 1, 0, 1, 1},
+                    {0, 0, 1, 1, 0, 0}
+                };
+            // Add more cases for other predefined shapes if needed...
+            default:
+                return new int[0, 0]; // Default to an empty shape
         }
     }
 
