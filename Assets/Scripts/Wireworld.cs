@@ -16,6 +16,9 @@ public class Wireworld : MonoBehaviour
     public Slider delaySlider;
     public TMP_Dropdown cellDrawTypeDropdown;
     public TMP_Dropdown predefinedShapeDropdown;
+    public TMP_InputField saveloadInputField;
+    public Button saveButton;
+    public Button loadButton;
 
     [Header("Controls")]
     public int width = 50;
