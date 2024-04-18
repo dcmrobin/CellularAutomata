@@ -126,10 +126,20 @@ public class SandAutomaton : MonoBehaviour
                     newCells[x, y + 1] = 1;
                     continue;
                 }
-
-                if (y == 0 || cells[x, y - 1] == 1)
+                
+                // Check diagonally down-left
+                if (x > 0 && y < height - 1 && cells[x - 1, y + 1] == 0)
                 {
-                    newCells[x, y] = 1;
+                    // Move the sand particle diagonally down-left
+                    newCells[x - 1, y + 1] = 1;
+                    continue;
+                }
+
+                // Check diagonally down-right
+                if (x < width - 1 && y < height - 1 && cells[x + 1, y + 1] == 0)
+                {
+                    // Move the sand particle diagonally down-right
+                    newCells[x + 1, y + 1] = 1;
                     continue;
                 }
 
