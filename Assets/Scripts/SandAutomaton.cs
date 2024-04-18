@@ -85,7 +85,7 @@ public class SandAutomaton : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                colors[x + y * width] = (cells[x, y] == 1) ? Color.white : Color.black;
+                colors[x + y * width] = (cells[x, y] == 1) ? Color.yellow : Color.black;
             }
         }
         texture.SetPixels(colors);
@@ -122,12 +122,11 @@ public class SandAutomaton : MonoBehaviour
                 // Gravity: Check if there's an empty cell below
                 if (y < height - 1 && cells[x, y + 1] == 0)
                 {
-                    // Move the sand particle upwards
+                    // Move the sand particle down
                     newCells[x, y + 1] = 1;
                     continue;
                 }
 
-                // Stacking: If there's a solid surface below, don't move
                 if (y == 0 || cells[x, y - 1] == 1)
                 {
                     newCells[x, y] = 1;
