@@ -15,6 +15,7 @@ public class SandAutomaton : MonoBehaviour
     [Header("UI")]
     public Slider densitySlider;
     public Slider delaySlider;
+    public TMP_Dropdown cellTypeDropdown;
 
     [Header("Controls")]
     [Range(0, 1)]
@@ -85,7 +86,7 @@ public class SandAutomaton : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                colors[x + y * width] = (cells[x, y] == 1) ? Color.yellow : Color.black;
+                colors[x + y * width] = cells[x, y] == 1 ? Color.yellow : cells[x, y] == 2 ? Color.cyan : cells[x, y] == 3 ? Color.gray : Color.black;
             }
         }
         texture.SetPixels(colors);
@@ -119,32 +120,57 @@ public class SandAutomaton : MonoBehaviour
                 if (cells[x, y] == 0)
                     continue;
 
-                // Gravity: Check if there's an empty cell below
-                if (y < height - 1 && cells[x, y + 1] == 0)
-                {
-                    // Move the sand particle down
-                    newCells[x, y + 1] = 1;
-                    continue;
-                }
                 
-                // Check diagonally down-left
-                if (x > 0 && y < height - 1 && cells[x - 1, y + 1] == 0)
+                if (x < width - 1 && x > 0 && y < height - 1)
                 {
-                    // Move the sand particle diagonally down-left
-                    newCells[x - 1, y + 1] = 1;
-                    continue;
-                }
-
-                // Check diagonally down-right
-                if (x < width - 1 && y < height - 1 && cells[x + 1, y + 1] == 0)
-                {
-                    // Move the sand particle diagonally down-right
-                    newCells[x + 1, y + 1] = 1;
-                    continue;
+                    if (cells[x, y] == 1)// if sand
+                    {
+                        if (cells[x, y + 1] == 0)// gravity
+                        {
+                            newCells[x, y + 1] = 1;
+                            continue;
+                        }
+                        else if (cells[x, y + 1] == 2)// sand sinks in water and displaces it
+                        {
+                            //newCells[x, y] = 2;
+                            newCells[x, y + 1] = 1;
+                            continue;
+                        }
+    
+                        if (cells[x - 1, y + 1] == 0 && cells[x + 1, y + 1] == 0)
+                        {
+                            if (UnityEngine.Random.value > 0.5)
+                            {
+                                newCells[x - 1, y + 1] = 1;
+                            }
+                            if (UnityEngine.Random.value < 0.5)
+                            {
+                                newCells[x + 1, y + 1] = 1;
+                            }
+                        }
+                        else if (cells[x - 1, y + 1] == 0)
+                        {
+                            newCells[x - 1, y + 1] = 1;
+                            continue;
+                        }
+                        else if (cells[x + 1, y + 1] == 0)
+                        {
+                            newCells[x + 1, y + 1] = 1;
+                            continue;
+                        }
+                    }
+                    else if (cells[x, y] == 2)// if water
+                    {
+                        if (cells[x, y + 1] == 0)// gravity
+                        {
+                            newCells[x, y + 1] = 2;
+                            continue;
+                        }
+                    }
                 }
 
                 // If none of the above conditions are met, the sand particle remains where it is
-                newCells[x, y] = 1;
+                newCells[x, y] = cells[x, y] == 1 ? 1 : cells[x, y] == 2 ? 2 : cells[x, y] == 3 ? 3 : 0;
             }
         }
 
@@ -162,7 +188,7 @@ public class SandAutomaton : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            SetCell(1);
+            SetCell(cellTypeDropdown.value + 1);
         }
         else if (Input.GetMouseButton(1))
         {
