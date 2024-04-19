@@ -130,33 +130,38 @@ public class SandAutomaton : MonoBehaviour
                             newCells[x, y + 1] = 1;
                             continue;
                         }
-                        else if (cells[x, y + 1] == 2)// sand sinks in water and displaces it
-                        {
-                            //newCells[x, y] = 2;
-                            newCells[x, y + 1] = 1;
-                            continue;
-                        }
-    
+
                         if (cells[x - 1, y + 1] == 0 && cells[x + 1, y + 1] == 0)
                         {
-                            if (UnityEngine.Random.value > 0.5)
+                            if (cells[x, y + 1] != 2)
                             {
-                                newCells[x - 1, y + 1] = 1;
-                            }
-                            if (UnityEngine.Random.value < 0.5)
-                            {
-                                newCells[x + 1, y + 1] = 1;
+                                if (UnityEngine.Random.value > 0.5)
+                                {
+                                    newCells[x - 1, y + 1] = 1;
+                                    continue;
+                                }
+                                if (UnityEngine.Random.value < 0.5)
+                                {
+                                    newCells[x + 1, y + 1] = 1;
+                                    continue;
+                                }
                             }
                         }
                         else if (cells[x - 1, y + 1] == 0)
                         {
-                            newCells[x - 1, y + 1] = 1;
-                            continue;
+                            if (cells[x, y + 1] != 2)
+                            {
+                                newCells[x - 1, y + 1] = 1;
+                                continue;
+                            }
                         }
                         else if (cells[x + 1, y + 1] == 0)
                         {
-                            newCells[x + 1, y + 1] = 1;
-                            continue;
+                            if (cells[x, y + 1] != 2)
+                            {
+                                newCells[x + 1, y + 1] = 1;
+                                continue;
+                            }
                         }
                     }
                     else if (cells[x, y] == 2)// if water
@@ -164,6 +169,12 @@ public class SandAutomaton : MonoBehaviour
                         if (cells[x, y + 1] == 0)// gravity
                         {
                             newCells[x, y + 1] = 2;
+                            continue;
+                        }
+                        else if (cells[x, y - 1] == 1)// sand sinks in water and displaces it
+                        {
+                            newCells[x, y] = 1;
+                            newCells[x, y - 1] = 2;
                             continue;
                         }
                     }
