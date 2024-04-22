@@ -164,12 +164,56 @@ public class SandAutomaton : MonoBehaviour
                             }
                         }
                     }
-                    else if (cells[x, y] == 2)// if water
+                    if (cells[x, y] == 2) // if water
                     {
-                        if (cells[x, y + 1] == 0)// gravity
+                        // Gravity: If the cell below is empty, move down
+                        if (y > 0 && cells[x, y + 1] == 0)
                         {
                             newCells[x, y + 1] = 2;
                             continue;
+                        }
+
+                        // Check for horizontal movement
+                        bool canMoveLeft = x > 0 && cells[x - 1, y] == 0;
+                        bool canMoveRight = x < width - 1 && cells[x + 1, y] == 0;
+
+                        // Move left if only left is empty
+                        if (canMoveLeft && !canMoveRight)
+                        {
+                            if (newCells[x - 1, y] != 2) // Only move if target cell is not water
+                            {
+                                newCells[x - 1, y] = 2;
+                                continue;
+                            }
+                        }
+                        // Move right if only right is empty
+                        else if (canMoveRight && !canMoveLeft)
+                        {
+                            if (newCells[x + 1, y] != 2) // Only move if target cell is not water
+                            {
+                                newCells[x + 1, y] = 2;
+                                continue;
+                            }
+                        }
+                        // Randomly choose between left and right if both are empty
+                        else if (canMoveLeft && canMoveRight)
+                        {
+                            if (UnityEngine.Random.value > 0.5f)
+                            {
+                                if (newCells[x - 1, y] != 2) // Only move if target cell is not water
+                                {
+                                    newCells[x - 1, y] = 2;
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                if (newCells[x + 1, y] != 2) // Only move if target cell is not water
+                                {
+                                    newCells[x + 1, y] = 2;
+                                    continue;
+                                }
+                            }
                         }
                     }
                 }
