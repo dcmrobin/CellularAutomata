@@ -171,16 +171,10 @@ public class SandAutomaton : MonoBehaviour
                             newCells[x, y + 1] = 2;
                             continue;
                         }
-                        else if (cells[x, y - 1] == 1)// sand sinks in water and displaces it
-                        {
-                            newCells[x, y] = 1;
-                            newCells[x, y - 1] = 2;
-                            continue;
-                        }
                     }
                 }
 
-                // If none of the above conditions are met, the sand particle remains where it is
+                // If none of the above conditions are met, the particle remains where it is
                 newCells[x, y] = cells[x, y] == 1 ? 1 : cells[x, y] == 2 ? 2 : cells[x, y] == 3 ? 3 : 0;
             }
         }
