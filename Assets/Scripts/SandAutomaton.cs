@@ -260,7 +260,7 @@ public class SandAutomaton : MonoBehaviour
                                     continue;
                                 }
                             }
-                            else
+                            else if (UnityEngine.Random.value < 0.5f)
                             {
                                 if (newCells[x + 1, y] != 2) // Only move if target cell is not water
                                 {
