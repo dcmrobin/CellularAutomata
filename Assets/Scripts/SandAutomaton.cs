@@ -127,7 +127,34 @@ public class SandAutomaton : MonoBehaviour
                     {
                         if (cells[x, y + 1] == 0)// gravity
                         {
-                            newCells[x, y + 1] = 1;
+                            int maxFallDistance = 5;
+                            int fallDistance = 0;
+
+                            // Check up to 5 cells downwards
+                            for (int i = 1; i <= maxFallDistance; i++)
+                            {
+                                // Check if within bounds
+                                if (y + i >= height)
+                                {
+                                    fallDistance = i - 1;
+                                    break;
+                                }
+
+                                // Check if the cell below is empty
+                                if (cells[x, y + i] == 0)
+                                {
+                                    fallDistance = i;
+                                }
+                                else
+                                {
+                                    // Stop if a solid cell is encountered
+                                    fallDistance = i - 1;
+                                    break;
+                                }
+                            }
+
+                            // Move the sand particle down by the determined fall distance
+                            newCells[x, Mathf.Min(y + fallDistance, height - 1)] = 1;
                             continue;
                         }
 
